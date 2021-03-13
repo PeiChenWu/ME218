@@ -1,0 +1,9 @@
+.\outputs\intsample.o: Source\IntSample.c
+.\outputs\intsample.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+.\outputs\intsample.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_memmap.h
+.\outputs\intsample.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_timer.h
+.\outputs\intsample.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_sysctl.h
+.\outputs\intsample.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_nvic.h
+.\outputs\intsample.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_types.h
+.\outputs\intsample.o: .\Headers\bitdefs.h
+.\outputs\intsample.o: .\Headers\IntSample.h

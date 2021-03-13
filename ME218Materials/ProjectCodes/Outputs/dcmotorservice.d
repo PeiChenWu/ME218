@@ -1,0 +1,17 @@
+.\outputs\dcmotorservice.o: Source\DCMotorService.c
+.\outputs\dcmotorservice.o: .\Headers\DCMotorService.h
+.\outputs\dcmotorservice.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+.\outputs\dcmotorservice.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h
+.\outputs\dcmotorservice.o: .\Headers\Init.h
+.\outputs\dcmotorservice.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_memmap.h
+.\outputs\dcmotorservice.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_types.h
+.\outputs\dcmotorservice.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_gpio.h
+.\outputs\dcmotorservice.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_sysctl.h
+.\outputs\dcmotorservice.o: C:\ti\TivaWare_C_Series-2.1.0.12573\driverlib/gpio.h
+.\outputs\dcmotorservice.o: .\Headers\IntSample.h
+.\outputs\dcmotorservice.o: .\Headers\MotorPWM.h
+.\outputs\dcmotorservice.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
+.\outputs\dcmotorservice.o: .\Headers\termio.h
+.\outputs\dcmotorservice.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdlib.h
+.\outputs\dcmotorservice.o: C:\ti\TivaWare_C_Series-2.1.0.12573\utils/uartstdio.h
+.\outputs\dcmotorservice.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdarg.h

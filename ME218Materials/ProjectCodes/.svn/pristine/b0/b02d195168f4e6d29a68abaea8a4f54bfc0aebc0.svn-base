@@ -1,0 +1,64 @@
+#include "DCMotorService.h"
+#include "Init.h"
+#include "IntSample.h"
+#include "MotorPWM.h"
+
+#include <stdio.h>
+#include <termio.h>
+
+
+void Rotate( bool Dir, uint8_t RPM)
+{
+	EnableIntSample(true);
+	SetLMotorDesRPM(RPM);
+	SetRMotorDesRPM(RPM);
+	
+	HWREG(MOTOR_DATA) &= ~( LEFT_MOTOR_BRAKE_PIN | RIGHT_MOTOR_BRAKE_PIN );
+	//SetMotorPWMDuty(50, LeftMotor);
+	//SetMotorPWMDuty(50, RightMotor);
+	
+	if (Dir)
+	{
+		HWREG(MOTOR_DATA) |= LEFT_MOTOR_DIR_PIN;
+		HWREG(MOTOR_DATA) &= ~RIGHT_MOTOR_DIR_PIN;
+	}
+	else
+	{
+		HWREG(MOTOR_DATA) |= RIGHT_MOTOR_DIR_PIN;
+		HWREG(MOTOR_DATA) &= ~LEFT_MOTOR_DIR_PIN;
+	}
+}
+
+void Move( bool Dir, uint8_t RPM)
+{
+	EnableIntSample(true);
+	HWREG(MOTOR_DATA) &= ~( LEFT_MOTOR_BRAKE_PIN | RIGHT_MOTOR_BRAKE_PIN );
+	SetLMotorDesRPM(RPM);
+	SetRMotorDesRPM(RPM);
+	
+	//SetMotorPWMDuty(50, LeftMotor);
+	//SetMotorPWMDuty(50, RightMotor);
+	
+	if (Dir)
+	{
+		printf("\r\n Move Forward");
+		HWREG(MOTOR_DATA) |= LEFT_MOTOR_DIR_PIN;
+		HWREG(MOTOR_DATA) |= RIGHT_MOTOR_DIR_PIN;
+	}
+	else
+	{
+		HWREG(MOTOR_DATA) &= ~RIGHT_MOTOR_DIR_PIN;
+		HWREG(MOTOR_DATA) &= ~LEFT_MOTOR_DIR_PIN;
+	}
+}
+
+void Brake()
+{
+	HWREG(MOTOR_DATA) |= ( LEFT_MOTOR_BRAKE_PIN | RIGHT_MOTOR_BRAKE_PIN );
+	
+	
+	// Need to set PWM to HIGH for successful brake
+	EnableIntSample(false);
+	SetMotorPWMDuty(100, LeftMotor);
+	SetMotorPWMDuty(100, RightMotor);
+}

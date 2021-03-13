@@ -1,0 +1,16 @@
+#ifndef DrsGameStatusSM_H
+#define DrsGameStatusSM_H
+
+
+// typedefs for the states
+// State definitions for use with the query function
+typedef enum { ST_GAMESTATUS_QUERY, ST_GAMESTATUS_READY } DrsGameStatusState_t ;
+
+
+// Public Function Prototypes
+
+ES_Event RunDrsGameStatusSM( ES_Event CurrentEvent );
+void StartDrsGameStatusSM ( ES_Event CurrentEvent );
+DrsGameStatusState_t QueryDrsGameStatusSM ( void );
+
+#endif 

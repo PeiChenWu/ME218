@@ -1,0 +1,16 @@
+#ifndef ToRegionSM_H
+#define ToRegionSM_H
+
+
+// typedefs for the states
+// State definitions for use with the query function
+typedef enum { ST_ADJUST_ORI, ST_MOVE_TOWARDS } ToRegionState_t ;
+
+
+// Public Function Prototypes
+
+ES_Event RunToRegionSM( ES_Event CurrentEvent );
+void StartToRegionSM ( ES_Event CurrentEvent );
+ToRegionState_t QueryToRegionSM ( void );
+
+#endif 

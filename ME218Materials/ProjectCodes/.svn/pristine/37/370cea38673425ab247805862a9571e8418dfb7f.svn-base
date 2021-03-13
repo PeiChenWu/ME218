@@ -1,0 +1,125 @@
+/*----------------------------- Include Files -----------------------------*/
+// Basic includes for a program using the Events and Services Framework
+#include "ES_Configure.h"
+#include "ES_Framework.h"
+
+#include "DrsGameStatusSM.h"
+#include "SSI.h"
+
+/*----------------------------- Module Defines ----------------------------*/
+// define constants for the states for this machine
+// and any other local defines
+
+#define ENTRY_STATE ST_GAMESTATUS_QUERY
+
+/*---------------------------- Module Functions ---------------------------*/
+/* prototypes for private functions for this machine, things like during
+   functions, entry & exit functions.They should be functions relevant to the
+   behavior of this state machine
+*/
+static ES_Event DuringDrsGameStatusQuery(ES_Event Event);
+
+/*---------------------------- Module Variables ---------------------------*/
+static DrsGameStatusState_t CurrentState;
+
+static uint8_t CurrentByte;
+
+/*------------------------------ Module Code ------------------------------*/
+
+ES_Event RunDrsGameStatusSM( ES_Event CurrentEvent )
+{
+   bool MakeTransition = false;/* are we making a state transition? */
+   DrsGameStatusState_t NextState = CurrentState;
+   ES_Event EntryEventKind = { ES_ENTRY, 0 };// default to normal entry to new state
+   ES_Event ReturnEvent = CurrentEvent; // assume we are not consuming event
+
+   switch ( CurrentState )
+   {
+       case ST_GAMESTATUS_QUERY :
+			 {
+				 // Send command to query for current game status
+				 
+				 // Process byte received
+				 // Send next command to receive next byte
+				 
+         break;
+			 }
+			 case ST_GAMESTATUS_READY:
+			 {
+				 // Idle State, wait for next query
+				 break;
+			 }
+    }
+    //   If we are making a state transition
+    if (MakeTransition == true)
+    {
+       //   Execute exit function for current state
+       CurrentEvent.EventType = ES_EXIT;
+       RunDrsGameStatusSM(CurrentEvent);
+
+       CurrentState = NextState; //Modify state variable
+
+       // Execute entry function for new state
+       // this defaults to ES_ENTRY
+       RunDrsGameStatusSM(EntryEventKind);
+     }
+     return(ReturnEvent);
+}
+
+void StartDrsGameStatusSM ( ES_Event CurrentEvent )
+{
+   if ( ES_ENTRY_HISTORY != CurrentEvent.EventType )
+   {
+        CurrentState = ENTRY_STATE;
+   }
+	 
+   // call the entry function (if any) for the ENTRY_STATE
+   RunDrsGameStatusSM(CurrentEvent);
+}
+
+
+DrsGameStatusState_t QueryDrsGameStatusSM ( void )
+{
+   return(CurrentState);
+}
+
+/***************************************************************************
+ private functions
+ ***************************************************************************/
+
+static ES_Event DuringStateGameStatus( ES_Event Event)
+{
+    ES_Event ReturnEvent = Event; // assme no re-mapping or comsumption
+
+    // process ES_ENTRY, ES_ENTRY_HISTORY & ES_EXIT events
+    if ( (Event.EventType == ES_ENTRY) ||
+         (Event.EventType == ES_ENTRY_HISTORY) )
+    {
+        // implement any entry actions required for this state machine
+        
+        // after that start any lower level machines that run in this state
+        //StartLowerLevelSM( Event );
+        // repeat the StartxxxSM() functions for concurrent state machines
+        // on the lower level
+    }
+    else if ( Event.EventType == ES_EXIT )
+    {
+        // on exit, give the lower levels a chance to clean up first
+        //RunLowerLevelSM(Event);
+        // repeat for any concurrently running state machines
+        // now do any local exit functionality
+      
+    }else
+    // do the 'during' function for this state
+    {
+        // run any lower level state machine
+        // ReturnEvent = RunLowerLevelSM(Event);
+      
+        // repeat for any concurrent lower level machines
+      
+        // do any activity that is repeated as long as we are in this state
+    }
+    // return either Event, if you don't want to allow the lower level machine
+    // to remap the current event, or ReturnEvent if you do want to allow it.
+    return(ReturnEvent);
+}

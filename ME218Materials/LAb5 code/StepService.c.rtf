@@ -1,0 +1,303 @@
+{\rtf1\ansi\uc0 \deff1{\fonttbl{\f1\fmodern\fprq1\fcharset0 Courier New;}}{\colortbl;\red255\green255\blue255;\red00\green00\blue00;\red255\green00\blue00;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue255;\red255\green34\blue255;\red255\green34\blue255;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue00;\red255\green34\blue255;\red178\green104\blue24;\red00\green255\blue00;\red178\green104\blue24;\red00\green00\blue00;}
+{\stylesheet{
+{\*\cs2\additive\cf2\f1\fs20\sbasedon222\snext0 HL Default;}
+{\*\cs3\additive\cf3\f1\fs20\sbasedon222\snext0 HL String;}
+{\*\cs4\additive\cf4\f1\fs20\sbasedon222\snext0 HL Number;}
+{\*\cs5\additive\cf5\f1\fs20\sbasedon222\snext0 HL SL Comment;}
+{\*\cs6\additive\cf6\f1\fs20\sbasedon222\snext0 HL ML Comment;}
+{\*\cs7\additive\cf7\f1\fs20\sbasedon222\snext0 HL Escape Character;}
+{\*\cs8\additive\cf8\f1\fs20\sbasedon222\snext0 HL Directive;}
+{\*\cs9\additive\cf9\f1\fs20\sbasedon222\snext0 HL Directive String;}
+{\*\cs10\additive\cf10\f1\fs20\sbasedon222\snext0 HL Line;}
+{\*\cs11\additive\cf11\f1\fs20\sbasedon222\snext0 HL Operator;}
+{\*\cs12\additive\cf12\f1\fs20\sbasedon222\snext0 HL Interpolation;}
+{\*\cs13\additive\cf13\f1\fs20\sbasedon222\snext0 HL Keyword A;}
+{\*\cs14\additive\cf14\f1\fs20\sbasedon222\snext0 HL Keyword B;}
+{\*\cs15\additive\cf15\f1\fs20\sbasedon222\snext0 HL Keyword C;}
+{\*\cs16\additive\cf16\f1\fs20\sbasedon222\snext0 HL Keyword D;}
+}}
+\paperw11905\paperh16837\margl1134\margr1134\margt1134\margb1134\sectd\plain\f1\fs20
+\pard \cbpat1{{\*\cs2\cf2{}}{\*\cs6\cf6{/****************************************************************************}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Module}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   StepService.c}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Revision}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   {1}.{0}.{1}}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Description}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   This is a StepService file for implementing flat state machines under the}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   Gen{2} Events and Services Framework.}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Notes}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ History}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ When           Who     What/Why}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ -------------- ---     --------}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ {0}{1}/{1}{5}/{1}{2} {1}{1}:{1}{2} jec      revisions for Gen{2} framework}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ {1}{1}/{0}{7}/{1}{1} {1}{1}:{2}{6} jec      made the queue static}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ {1}{0}/{3}{0}/{1}{1} {1}{7}:{5}{9} jec      fixed references to CurrentEvent in RunTemplateSM()}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ {1}{0}/{2}{3}/{1}{1} {1}{8}:{2}{0} jec      began conversion from SMTemplate.c ({0}{2}/{2}{0}/{0}{7} rev)}}}\par\pard
+\cbpat1{{\*\cs6\cf6{****************************************************************************/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*----------------------------- Include Files -----------------------------*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/* include header files for this state machine as well as any machines at the}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   next lower level in the hierarchy that are sub-machines to this machine}}}\par\pard
+\cbpat1{{\*\cs6\cf6{*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs8\cf8{#include}} {\*\cs9\cf9{"ES_Configure.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"ES_Framework.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"ES_Types.h"}}{\*\cs8\cf8{ }}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs8\cf8{#include}} {\*\cs9\cf9{"EnablePA{2}{5}_PB{2}{3}_PD{7}_PF{0}.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"termio.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"inc/hw_memmap.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"inc/hw_types.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"inc/hw_gpio.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"inc/hw_sysctl.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"driverlib/gpio.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"driverlib/interrupt.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs8\cf8{#include}} {\*\cs9\cf9{"StepService.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"ADCSWTrigger.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#include}} {\*\cs9\cf9{"PWMTiva.h"}}{\*\cs8\cf8{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*----------------------------- Module Defines ----------------------------*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs8\cf8{#define ALL_BITS ({0}xff<<{2})}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*---------------------------- Module Functions ---------------------------*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/* prototypes for private functions for this machine.They should be functions}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   relevant to the behavior of this state machine}}}\par\pard
+\cbpat1{{\*\cs6\cf6{*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs14\cf14{static void}} {\*\cs2\cf2{}}{\*\cs16\cf16{Part{1}_{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs14\cf14{void}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}} {\*\cs2\cf2{}}{\*\cs5\cf5{//only for testing Part{1}.{1}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*---------------------------- Module Variables ---------------------------*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs5\cf5{// everybody needs a state variable, you may need others as well.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs5\cf5{// type of state variable should match htat of enum in header file}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static}} {\*\cs2\cf2{StepServiceState_t CurrentState}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs5\cf5{// with the introduction of Gen{2}, we need a module level Priority var as well}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static uint{8}_t}} {\*\cs2\cf2{StepServicePriority}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*Duty cycle is for micro step drive.*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs5\cf5{//DUTY_B = array with phase B duty cycle}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static uint{8}_t}} {\*\cs2\cf2{Duty_B_cycle}}{\*\cs11\cf11{[}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{] = \{}}{\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{\};}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs5\cf5{//DUTY_A = array with phase A duty cycle}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static uint{8}_t}} {\*\cs2\cf2{Duty_A_cycle}}{\*\cs11\cf11{[}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{] = \{}}{\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{\};}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs5\cf5{//StepConfig = array with step configuration}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static uint{8}_t}} {\*\cs2\cf2{StepNum}}{\*\cs11\cf11{[}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{] = \{}}{\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}A}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}A}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}A}}{\*\cs2\cf2{}}{\*\cs11\cf11{\};}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs6\cf6{/*The indexes for FullStepDrive is {0},{4},{8},{1}{2}*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*The indexes for WaveDrive is {2},{6},{1}{0},{1}{4}*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*The indexes for HalfStepDrive is {0},{2},{4},{6},{8},{1}{0},{1}{2},{1}{4}*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*The indexes for MicroStepDrive is {0} - {1}{5}*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{{\*\cs5\cf5{//ConfigIndex = to hold the current configuration index for the StepConfig}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static signed int}} {\*\cs2\cf2{StepIndex}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{{\*\cs5\cf5{//Wave drive #define startposition is equal to {2}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs5\cf5{//#define startposition {2}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs5\cf5{//Full step drive}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#define startposition {0}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs5\cf5{//DIR = holds the direction whether CW or CCW}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static int DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs14\cf14{static uint{1}{6}_t}} {\*\cs2\cf2{Para}}{\*\cs11\cf11{;}} }\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs8\cf8{#define FullStepDrive {4}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#define WaveDrive {4}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#define HalfStepDrive {2}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs8\cf8{#define MicroStepDrive {1}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*------------------------------ Module Code ------------------------------*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/****************************************************************************}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Function}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     InitStepService}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Parameters}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     uint{8}_t : the priorty of this service}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Returns}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     bool, false if error in initialization, true otherwise}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Description}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     Saves away the priority, sets up the initial transition and does any}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     other required initialization for this state machine}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Notes}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Author}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     J. Edward Carryer, {1}{0}/{2}{3}/{1}{1}, {1}{8}:{5}{5}}}}\par\pard
+\cbpat1{{\*\cs6\cf6{****************************************************************************/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs14\cf14{bool}} {\*\cs2\cf2{}}{\*\cs16\cf16{InitStepService}} {\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{}}{\*\cs14\cf14{uint{8}_t}} {\*\cs2\cf2{Priority}} {\*\cs11\cf11{)}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{  ES_Event ThisEvent}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{  StepServicePriority}} {\*\cs11\cf11{=}} {\*\cs2\cf2{Priority}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs5\cf5{// put us into the Initial PseudoState}}}\par\pard
+\cbpat1{{\*\cs2\cf2{  CurrentState}} {\*\cs11\cf11{=}} {\*\cs2\cf2{MotorDrive}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs5\cf5{// post the initial transition event}}}\par\pard
+\cbpat1{{\*\cs2\cf2{  ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventType}} {\*\cs11\cf11{=}} {\*\cs2\cf2{ES_INIT}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{	{\*\cs5\cf5{//Motor Drive Pin PD {0},{1},{2},{3}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs16\cf16{HWREG}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{SYSCTL_RCGCGPIO}}{\*\cs11\cf11{) |=}} {\*\cs2\cf2{BIT{3}HI}}{\*\cs11\cf11{;}} {\*\cs2\cf2{}}{\*\cs5\cf5{//Initialize Port D}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs16\cf16{HWREG}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{GPIO_PORTD_BASE}}{\*\cs11\cf11{+}}{\*\cs2\cf2{GPIO_O_DEN}}{\*\cs11\cf11{) |= (}}{\*\cs2\cf2{GPIO_PIN_{0}}} {\*\cs11\cf11{|}} {\*\cs2\cf2{GPIO_PIN_{1}}} {\*\cs11\cf11{|}} {\*\cs2\cf2{GPIO_PIN_{2}}} {\*\cs11\cf11{|}} {\*\cs2\cf2{GPIO_PIN_{3}}}{\*\cs11\cf11{);}}  {\*\cs2\cf2{}}{\*\cs5\cf5{//PD{0},{1},{2},{3}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs16\cf16{HWREG}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{GPIO_PORTD_BASE}}{\*\cs11\cf11{+}}{\*\cs2\cf2{GPIO_O_DIR}}{\*\cs11\cf11{) |= (}}{\*\cs2\cf2{GPIO_PIN_{0}}} {\*\cs11\cf11{|}} {\*\cs2\cf2{GPIO_PIN_{1}}} {\*\cs11\cf11{|}} {\*\cs2\cf2{GPIO_PIN_{2}}} {\*\cs11\cf11{|}} {\*\cs2\cf2{GPIO_PIN_{3}}}{\*\cs11\cf11{);}} {\*\cs2\cf2{}}{\*\cs5\cf5{//Output }}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{	{\*\cs5\cf5{//Write StepMotor config to motor drive pin PB {0},{1},{2},{3}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs16\cf16{HWREG}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{GPIO_PORTD_BASE}}{\*\cs11\cf11{+(}}{\*\cs2\cf2{GPIO_O_DATA}}{\*\cs11\cf11{+}}{\*\cs2\cf2{ALL_BITS}}{\*\cs11\cf11{)) =}} {\*\cs2\cf2{StepNum}}{\*\cs11\cf11{[}}{\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{];}}}\par\pard
+\cbpat1{{\*\cs2\cf2{	}\par\pard
+\cbpat1{	StepIndex}} {\*\cs11\cf11{=}} {\*\cs2\cf2{startposition}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{	{\*\cs5\cf5{//Initialize PWM }}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs16\cf16{PWM_TIVA_Init}}{\*\cs2\cf2{}}{\*\cs11\cf11{();}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{	{\*\cs5\cf5{//Set Frequency {0}.{8}uS}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs16\cf16{PWM_TIVA_SetPeriod}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs4\cf4{{8}{0}{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}} {\*\cs2\cf2{}}{\*\cs5\cf5{//PB{4},{5} => group{1}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{	{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {2}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {3}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{  {\*\cs13\cf13{if}} {\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs16\cf16{ES_PostToService}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{StepServicePriority}}{\*\cs11\cf11{,}} {\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{) ==}} {\*\cs2\cf2{}}{\*\cs13\cf13{true}}{\*\cs2\cf2{}}{\*\cs11\cf11{)}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs11\cf11{\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}      {\*\cs13\cf13{return true}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs11\cf11{\}}}{\*\cs2\cf2{}}{\*\cs13\cf13{else}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs11\cf11{\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}      {\*\cs13\cf13{return false}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/****************************************************************************}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Function}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     PostStepService}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Parameters}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     EF_Event ThisEvent , the event to post to the queue}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Returns}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     boolean False if the Enqueue operation failed, True otherwise}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Description}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     Posts an event to this state machine's queue}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Notes}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Author}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     J. Edward Carryer, {1}{0}/{2}{3}/{1}{1}, {1}{9}:{2}{5}}}}\par\pard
+\cbpat1{{\*\cs6\cf6{****************************************************************************/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs14\cf14{bool}} {\*\cs2\cf2{}}{\*\cs16\cf16{PostStepService}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{ES_Event ThisEvent}} {\*\cs11\cf11{)}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs13\cf13{return}} {\*\cs2\cf2{}}{\*\cs16\cf16{ES_PostToService}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{StepServicePriority}}{\*\cs11\cf11{,}} {\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{);}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/****************************************************************************}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Function}}}\par\pard
+\cbpat1{{\*\cs6\cf6{    RunStepService}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Parameters}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   ES_Event : the event to process}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Returns}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   ES_Event, ES_NO_EVENT if no error ES_ERROR otherwise}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Description}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   add your description here}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Notes}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   uses nested switch/case to implement the machine.}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Author}}}\par\pard
+\cbpat1{{\*\cs6\cf6{   J. Edward Carryer, {0}{1}/{1}{5}/{1}{2}, {1}{5}:{2}{3}}}}\par\pard
+\cbpat1{{\*\cs6\cf6{****************************************************************************/}}{\*\cs2\cf2{}\par\pard
+\cbpat1{ES_Event}} {\*\cs16\cf16{RunStepService}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{ES_Event ThisEvent}} {\*\cs11\cf11{)}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{  ES_Event ReturnEvent}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{  ReturnEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventType}} {\*\cs11\cf11{=}} {\*\cs2\cf2{ES_NO_EVENT}}{\*\cs11\cf11{;}} {\*\cs2\cf2{}}{\*\cs5\cf5{// assume no errors}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{	{\*\cs5\cf5{//if event checker detects button down, than change the DIR}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventType}} {\*\cs11\cf11{==}} {\*\cs2\cf2{DBButtonDown}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs14\cf14{DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{==}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}				{\*\cs14\cf14{DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{= -}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs13\cf13{else if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs14\cf14{DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{== -}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}				{\*\cs14\cf14{DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{	{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventType}} {\*\cs11\cf11{==}} {\*\cs2\cf2{StepDrive}}{\*\cs11\cf11{)}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs11\cf11{\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{		Para}} {\*\cs11\cf11{=}} {\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventParam}}{\*\cs11\cf11{;}} {\*\cs2\cf2{}}{\*\cs5\cf5{//FullStepDrive={4} WaveDrive={4}  HalfStepDrive={2} MicroStepDrive={1}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{			StepIndex}} {\*\cs11\cf11{=}} {\*\cs2\cf2{StepIndex}} {\*\cs11\cf11{+}} {\*\cs2\cf2{Para}}{\*\cs11\cf11{*}}{\*\cs2\cf2{}}{\*\cs14\cf14{DIR}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{StepIndex}} {\*\cs11\cf11{>}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{				StepIndex}} {\*\cs11\cf11{-=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{StepIndex}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{				StepIndex}} {\*\cs11\cf11{+=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{		{\*\cs5\cf5{//Setting StepMotor config to motor drive pin}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs16\cf16{HWREG}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{GPIO_PORTD_BASE}}{\*\cs11\cf11{+(}}{\*\cs2\cf2{GPIO_O_DATA}}{\*\cs11\cf11{+}}{\*\cs2\cf2{ALL_BITS}}{\*\cs11\cf11{)) =}} {\*\cs2\cf2{StepNum}}{\*\cs11\cf11{[}}{\*\cs2\cf2{StepIndex}}{\*\cs11\cf11{];}}		}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs5\cf5{//if the driving method is Full, Half Step or Wave Drive, DutyCycle = {9}{9}.	else it's equal to microstep's dutycycle}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventParam}} {\*\cs11\cf11{==}} {\*\cs2\cf2{FullStepDrive}} {\*\cs11\cf11{||}} {\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventParam}} {\*\cs11\cf11{==}} {\*\cs2\cf2{HalfStepDrive}} {\*\cs11\cf11{||}} {\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventParam}} {\*\cs11\cf11{==}} {\*\cs2\cf2{WaveDrive}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {2} }}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {3}	}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs13\cf13{else if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventParam}} {\*\cs11\cf11{==}} {\*\cs2\cf2{MicroStepDrive}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{Duty_A_cycle}}{\*\cs11\cf11{[}}{\*\cs2\cf2{StepIndex}}{\*\cs11\cf11{],}} {\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {2} }}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{Duty_B_cycle}}{\*\cs11\cf11{[}}{\*\cs2\cf2{StepIndex}}{\*\cs11\cf11{],}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {3}	}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs11\cf11{\}}}			}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs5\cf5{//this is only for testing part{1}.{1}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{else if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventType}} {\*\cs11\cf11{==}} {\*\cs2\cf2{TestPart{1}_{1}}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}				{\*\cs16\cf16{Part{1}_{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{();}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}  {\*\cs13\cf13{return}} {\*\cs2\cf2{ReturnEvent}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	}\par\pard
+\cbpat1{{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/****************************************************************************}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Function}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     QueryStepService}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Parameters}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     None}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Returns}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     StepServiceState_t The current state of the StepService state machine}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Description}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     returns the current state of the StepService state machine}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Notes}}}\par\pard
+\cbpat1{{\*\cs6\cf6{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ Author}}}\par\pard
+\cbpat1{{\*\cs6\cf6{     J. Edward Carryer, {1}{0}/{2}{3}/{1}{1}, {1}{9}:{2}{1}}}}\par\pard
+\cbpat1{{\*\cs6\cf6{****************************************************************************/}}{\*\cs2\cf2{}\par\pard
+\cbpat1{StepServiceState_t}} {\*\cs16\cf16{QueryStepService}} {\*\cs2\cf2{}}{\*\cs11\cf11{(}} {\*\cs2\cf2{}}{\*\cs14\cf14{void}} {\*\cs2\cf2{}}{\*\cs11\cf11{)}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}   {\*\cs13\cf13{return}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{CurrentState}}{\*\cs11\cf11{);}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/***************************************************************************}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ private functions}}}\par\pard
+\cbpat1{{\*\cs6\cf6{ ***************************************************************************/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs14\cf14{static void}} {\*\cs2\cf2{}}{\*\cs16\cf16{Part{1}_{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs14\cf14{void}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs14\cf14{int}} {\*\cs2\cf2{i}}{\*\cs11\cf11{=}}{\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{while}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs13\cf13{true}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs14\cf14{char}} {\*\cs2\cf2{c}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs16\cf16{printf}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs3\cf3{"Enter key:"}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs16\cf16{scanf}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs3\cf3{"%c}}{\*\cs7\cf7{\\n}}{\*\cs3\cf3{"}}{\*\cs2\cf2{}}{\*\cs11\cf11{, &}}{\*\cs2\cf2{c}}{\*\cs11\cf11{);}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs5\cf5{//Set StepMotor config to motor drive pin}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs16\cf16{HWREG}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{GPIO_PORTD_BASE}}{\*\cs11\cf11{+(}}{\*\cs2\cf2{GPIO_O_DATA}}{\*\cs11\cf11{+}}{\*\cs2\cf2{ALL_BITS}}{\*\cs11\cf11{)) =}} {\*\cs2\cf2{StepNum}}{\*\cs11\cf11{[}}{\*\cs2\cf2{i}}{\*\cs11\cf11{];}}		}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {2} }}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs16\cf16{PWM_TIVA_SetDuty}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}}}{\*\cs2\cf2{}}{\*\cs11\cf11{);}}{\*\cs2\cf2{}}{\*\cs5\cf5{//Channel {3}	}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs14\cf14{DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{==}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{			i}} {\*\cs11\cf11{+=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{i}} {\*\cs11\cf11{>}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{					i}} {\*\cs11\cf11{-=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}				{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs13\cf13{else if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{}}{\*\cs14\cf14{DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{== -}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{			i}} {\*\cs11\cf11{-=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}			{\*\cs13\cf13{if}}{\*\cs2\cf2{}}{\*\cs11\cf11{(}}{\*\cs2\cf2{i}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{)\{}}}\par\pard
+\cbpat1{{\*\cs2\cf2{					i}} {\*\cs11\cf11{+=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{;}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}				{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs11\cf11{\}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{}}

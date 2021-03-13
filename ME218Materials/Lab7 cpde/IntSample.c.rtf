@@ -1,0 +1,116 @@
+{\rtf1\ansi\uc0 \deff1{\fonttbl{\f1\fmodern\fprq1\fcharset0 Courier New;}}{\colortbl;\red255\green255\blue255;\red00\green00\blue00;\red255\green00\blue00;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue255;\red255\green34\blue255;\red255\green34\blue255;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue00;\red255\green34\blue255;\red178\green104\blue24;\red00\green255\blue00;\red178\green104\blue24;\red00\green00\blue00;}
+\paperw11905\paperh16837\margl1134\margr1134\margt1134\margb1134\sectd\plain\f1\fs20
+\pard \cbpat1{{\cf2{}}{\cf8{#include <stdint.h>}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include <stdbool.h>}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include <stdio.h>}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"inc/hw_memmap.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"inc/hw_timer.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"inc/hw_sysctl.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"inc/hw_nvic.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"inc/hw_types.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"inc/hw_gpio.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"bitdefs.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"driverlib/sysctl.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"driverlib/gpio.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"driverlib/interrupt.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"utils/uartstdio.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"driverlib/pwm.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"driverlib/pin_map.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"ES_Configure.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"ES_Framework.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"ES_DeferRecall.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"termio.h"}}{\cf8{ }}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"ADCSWTrigger.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"InputCapture.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"PWMDemo.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include}} {\cf9{"IntSample.h"}}{\cf8{}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{{\cf5{// {4}{0},{0}{0}{0} ticks per mS assumes a {4}{0}Mhz clock}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#define TicksPerMS {4}{0}{0}{0}{0}}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{static uint{3}{2}_t}} {\cf2{TimeoutCount}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{{\cf14{uint{8}_t}} {\cf2{PIDTimes}}{\cf11{=}}{\cf2{}}{\cf4{{0}}}{\cf2{}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{static uint{3}{2}_t}} {\cf2{des_RPM}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{static int}}  {\cf2{SumRPMError}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf14{static int}}  {\cf2{CurrentRPMError}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf14{static float}}  {\cf2{control_RPM}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{float}} {\cf2{Kp}} {\cf11{=}}{\cf2{}}{\cf4{{0}.{8}}}{\cf2{}}{\cf11{,}}{\cf2{Ki}}{\cf11{=}}{\cf2{}}{\cf4{{0}.{5}}}{\cf2{}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{{\cf5{// we will use Timer A in Wide Timer {0} to generate the interrupt}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{void}} {\cf2{}}{\cf16{InitPeriodicInt}}{\cf2{}}{\cf11{(}} {\cf2{}}{\cf14{void}} {\cf2{}}{\cf11{)\{}}}\par\pard
+\cbpat1{{\cf2{	des_RPM}} {\cf11{=}} {\cf2{}}{\cf4{{0}}}{\cf2{}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{	SumRPMError}}{\cf11{=}}{\cf2{}}{\cf4{{0}}}{\cf2{}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}} {\cf15{volatile}} {\cf2{}}{\cf14{uint{3}{2}_t}} {\cf2{Dummy}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// start by enabling the clock to the timer (Wide Timer {0})}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{SYSCTL_RCGCWTIMER}}{\cf11{) |=}} {\cf2{SYSCTL_RCGCWTIMER_R{0}}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{ Dummy}} {\cf11{=}} {\cf2{}}{\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{SYSCTL_RCGCGPIO}}{\cf11{);}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// make sure that timer (Timer B) is disabled before configuring}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_CTL}}{\cf11{) &= ~}}{\cf2{TIMER_CTL_TBEN}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// set it up in {3}{2}bit wide (individual, not concatenated) mode}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// the constant name derives from the {1}{6}/{3}{2} bit timer, but this is a {3}{2}/{6}{4}}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// bit timer so we are setting the {3}{2}bit mode}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_CFG}}{\cf11{) =}} {\cf2{TIMER_CFG_{1}{6}_BIT}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// we want to use the full {3}{2} bit count, so initialize the Interval Load}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// set up timer B in capture mode}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_TBMR}}{\cf11{) =}}}\par\pard
+\cbpat1{{\cf2{}}  {\cf11{(}}{\cf2{}}{\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_TBMR}}{\cf11{)& ~}}{\cf2{TIMER_TBMR_TBMR_M}}{\cf11{)|}}}\par\pard
+\cbpat1{{\cf2{  TIMER_TBMR_TBMR_PERIOD}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}} {\cf5{// enable the Timer B in Wide Timer {0} interrupt in the NVIC}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// it is interrupt number {9}{5} so appears in EN{2} at bit {3}{1}}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_TBILR}}{\cf11{) =}} {\cf2{TicksPerMS}}{\cf11{*}}{\cf2{}}{\cf4{{2}{0}}}{\cf2{}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_IMR}}{\cf11{) |=}} {\cf2{TIMER_IMR_TBTOIM}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{NVIC_EN{2}}}{\cf11{) =}} {\cf2{BIT{3}{1}HI}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// {9}{5}= {4}n+{3} n={2}{3}}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{NVIC_PRI{2}{3}}}{\cf11{) = ((}}{\cf2{}}{\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{NVIC_PRI{2}{3}}}{\cf11{)&(~}}{\cf2{NVIC_PRI{2}{3}_INTD_M}}{\cf11{)) |}} {\cf2{BIT{2}{9}HI}}{\cf11{);}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{// make sure interrupts are enabled globally}}}\par\pard
+\cbpat1{{\cf2{}}  {\cf16{__enable_irq}}{\cf2{}}{\cf11{();}}}\par\pard
+\cbpat1{{\cf2{}} {\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_CTL}}{\cf11{) |= (}}{\cf2{TIMER_CTL_TBEN}} {\cf11{|}} {\cf2{TIMER_CTL_TBSTALL}}{\cf11{);}}}\par\pard
+\cbpat1{{\cf2{}}{\cf11{\}}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{void}} {\cf2{}}{\cf16{PeriodicIntResponse}}{\cf2{}}{\cf11{(}} {\cf2{}}{\cf14{void}} {\cf2{}}{\cf11{)\{}}}\par\pard
+\cbpat1{{\cf2{}}{\cf5{//start by clearing the source of the interrupt }}}\par\pard
+\cbpat1{{\cf2{}}	{\cf16{HWREG}}{\cf2{}}{\cf11{(}}{\cf2{WTIMER{0}_BASE}}{\cf11{+}}{\cf2{TIMER_O_ICR}}{\cf11{) =}} {\cf2{TIMER_ICR_TBTOCINT}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}	}\par\pard
+\cbpat1{	{\cf14{uint{3}{2}_t}} {\cf2{cur_rpm}} {\cf11{=}} {\cf2{}}{\cf4{{8}{0}{0}{0}{0}{0}}}{\cf2{}}{\cf11{/}}{\cf2{}}{\cf16{GetPeriod}}{\cf2{}}{\cf11{();}}			}\par\pard
+\cbpat1{{\cf2{	}\par\pard
+\cbpat1{	CurrentRPMError}} {\cf11{=}} {\cf2{des_RPM}} {\cf11{-}} {\cf2{cur_rpm}}{\cf11{;}} {\cf2{}}{\cf5{//get the current error between desired and current }}}\par\pard
+\cbpat1{{\cf2{	}\par\pard
+\cbpat1{	SumRPMError}} {\cf11{+=}} {\cf2{CurrentRPMError}}{\cf11{;}} {\cf2{}}{\cf5{//sum the all error }}}\par\pard
+\cbpat1{{\cf2{	}\par\pard
+\cbpat1{	control_RPM}} {\cf11{=}} {\cf2{Kp}}{\cf11{*}}{\cf2{CurrentRPMError}}{\cf11{+}} {\cf2{Ki}} {\cf11{*}} {\cf2{SumRPMError}}{\cf11{;}} {\cf2{}}{\cf5{//calculate the request duty }}}\par\pard
+\cbpat1{{\cf2{}}	}\par\pard
+\cbpat1{	{\cf13{if}}{\cf2{}}{\cf11{(}}{\cf2{control_RPM}}{\cf11{>}}{\cf2{}}{\cf4{{1}{0}{0}}}{\cf2{}}{\cf11{)}}}\par\pard
+\cbpat1{{\cf2{}}	{\cf11{\{}}}\par\pard
+\cbpat1{{\cf2{		control_RPM}} {\cf11{=}} {\cf2{}}{\cf4{{1}{0}{0}}}{\cf2{}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{		SumRPMError}} {\cf11{-=}}{\cf2{CurrentRPMError}}{\cf11{;}} {\cf2{}}{\cf5{//anti-windup}}}\par\pard
+\cbpat1{{\cf2{}}	{\cf11{\}}}}\par\pard
+\cbpat1{{\cf2{}}	{\cf13{else if}} {\cf2{}}{\cf11{(}}{\cf2{control_RPM}}{\cf11{<}} {\cf2{}}{\cf4{{0}}}{\cf2{}}{\cf11{)}}}\par\pard
+\cbpat1{{\cf2{}}	{\cf11{\{}}}\par\pard
+\cbpat1{{\cf2{   control_RPM}} {\cf11{=}} {\cf2{}}{\cf4{{0}}}{\cf2{}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{		SumRPMError}}{\cf11{-=}}{\cf2{CurrentRPMError}}{\cf11{;}} {\cf2{}}{\cf5{//anti-windup}}}\par\pard
+\cbpat1{{\cf2{}}	{\cf11{\}}}}\par\pard
+\cbpat1{{\cf2{}}	}\par\pard
+\cbpat1{	{\cf5{//printf("DesiredRPM,%d\\n\\r",des_RPM);}}}\par\pard
+\cbpat1{{\cf2{}}	{\cf5{//printf("CurrentRPM,%d\\n\\r",cur_rpm);}}}\par\pard
+\cbpat1{{\cf2{}}	{\cf16{printf}}{\cf2{}}{\cf11{(}}{\cf2{}}{\cf3{"control_duty,%f}}{\cf7{\\n\\r}}{\cf3{"}}{\cf2{}}{\cf11{,}}{\cf2{control_RPM}}{\cf11{);}}}\par\pard
+\cbpat1{{\cf2{}}	}\par\pard
+\cbpat1{	{\cf16{SetPWMDuty}}{\cf2{}}{\cf11{(}}{\cf2{control_RPM}}{\cf11{);}} {\cf2{}}{\cf5{//set duty}}}\par\pard
+\cbpat1{{\cf2{}}{\cf11{\}}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{void}} {\cf2{}}{\cf16{SetDesiredRPM}}{\cf2{}}{\cf11{(}}{\cf2{}}{\cf14{uint{3}{2}_t}} {\cf2{desiredRPM}}{\cf11{)\{}}}\par\pard
+\cbpat1{{\cf2{		des_RPM}} {\cf11{=}} {\cf2{desiredRPM}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf11{\}}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{uint{3}{2}_t}} {\cf2{}}{\cf16{GetTimeoutCount}}{\cf2{}}{\cf11{(}} {\cf2{}}{\cf14{void}} {\cf2{}}{\cf11{)\{}}}\par\pard
+\cbpat1{{\cf2{}}  {\cf13{return}} {\cf2{TimeoutCount}}{\cf11{;}}}\par\pard
+\cbpat1{{\cf2{}}{\cf11{\}}}{\cf2{}}}\par\pard
+\cbpat1{}}

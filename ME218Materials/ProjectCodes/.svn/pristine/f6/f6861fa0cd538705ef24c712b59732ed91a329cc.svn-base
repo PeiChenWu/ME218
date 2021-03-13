@@ -1,0 +1,202 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+U:\_218bTeams\Team10\Project\ProjectCodes\KART.uvprojx
+Project File Date:  02/19/2015
+
+<h2>Output:</h2>
+Build target 'BaseFrameworkTarget'
+linking...
+Program Size: Code=7516 RO-data=1052 RW-data=164 ZI-data=2220  
+After Build - User command #1: fromelf --bin --output .\Outputs\BaseTarget.bin .\Outputs\BaseTarget.axf
+".\Outputs\BaseTarget.axf" - 0 Error(s), 0 Warning(s).
+</pre>
+</body>
+</html>
+10\\Project\\ProjectCodes\\Outputs\\BaseTarget.axf" 
+Connecting: Mode=JTAG, Speed=1000000Hz
+Connection failed!, error code=&d
+Error: Flash Download failed  -  Target DLL has been cancelled
+s without a newline
+  #endif //_IntSample_H_
+Source\Init.c(135): warning:  #1-D: last line of file ends without a newline
+  }
+Source\Init.c: 6 warnings, 0 errors
+linking...
+Program Size: Code=7516 RO-data=1052 RW-data=164 ZI-data=2220  
+After Build - User command #1: fromelf --bin --output .\Outputs\BaseTarget.bin .\Outputs\BaseTarget.axf
+".\Outputs\BaseTarget.axf" - 0 Error(s), 6 Warning(s).
+--output .\Outputs\BaseTarget.bin .\Outputs\BaseTarget.axf
+".\Outputs\BaseTarget.axf" - 0 Error(s), 5 Warning(s).
+ine
+  #endif
+.\Headers\SSI.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\InputCapture.h(23): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\IntSample.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif //_IntSample_H_
+Source\Init.c(136): warning:  #1-D: last line of file ends without a newline
+  }
+Source\Init.c: 6 warnings, 0 errors
+compiling MotorPWM.c...
+.\Headers\MotorPWM.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\MotorPWM.c(106): warning:  #1-D: last line of file ends without a newline
+  }
+Source\MotorPWM.c: 2 warnings, 0 errors
+compiling SSI.c...
+.\Headers\SSI.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\SSI.c(94): warning:  #1-D: last line of file ends without a newline
+  }
+Source\SSI.c: 2 warnings, 0 errors
+compiling TopMaster.c...
+.\Headers\TopMaster.h(12): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\DrsSM.h(27): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\KartSM.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif 
+Source\TopMaster.c(43): warning:  #177-D: variable "MakeTransition" was declared but never referenced
+                 bool MakeTransition = false;/* are we making a state transition? */
+Source\TopMaster.c(44): warning:  #177-D: variable "EntryEventKind" was declared but never referenced
+                 ES_Event EntryEventKind = { ES_ENTRY, 0 };// default to normal entry to new state
+Source\TopMaster.c(77): warning:  #223-D: function "StartDrsSM" declared implicitly
+         StartDrsSM(Event);
+Source\TopMaster.c: 6 warnings, 0 errors
+compiling DrsSM.c...
+.\Headers\DrsSM.h(27): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\SSI.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\DrsSM.c(41): warning:  #177-D: variable "ThisEvent" was declared but never referenced
+        ES_Event ThisEvent;
+Source\DrsSM.c(302): warning:  #1-D: last line of file ends without a newline
+  }
+Source\DrsSM.c: 4 warnings, 0 errors
+compiling DrsGameStatusSM.c...
+.\Headers\DrsGameStatusSM.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\SSI.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\DrsGameStatusSM.c(125): warning:  #1-D: last line of file ends without a newline
+  }
+Source\DrsGameStatusSM.c(20): warning:  #177-D: function "DuringDrsGameStatusQuery" was declared but never referenced
+  static ES_Event DuringDrsGameStatusQuery(ES_Event Event);
+Source\DrsGameStatusSM.c(25): warning:  #177-D: variable "CurrentByte" was declared but never referenced
+  static uint8_t CurrentByte;
+Source\DrsGameStatusSM.c(90): warning:  #177-D: function "DuringStateGameStatus" was declared but never referenced
+  static ES_Event DuringStateGameStatus( ES_Event Event)
+Source\DrsGameStatusSM.c: 6 warnings, 0 errors
+compiling KartSM.c...
+.\Headers\KartSM.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\RacingSM.h(31): warning:  #1-D: last line of file ends without a newline
+  #endif 
+Source\KartSM.c(180): warning:  #1-D: last line of file ends without a newline
+  }
+Source\KartSM.c: 3 warnings, 0 errors
+compiling InputCapture.c...
+.\Headers\InputCapture.h(23): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\InputCapture.c: 1 warning, 0 errors
+compiling IntSample.c...
+.\Headers\IntSample.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif //_IntSample_H_
+.\Headers\InputCapture.h(23): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\MotorPWM.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\IntSample.c(166): warning:  #177-D: variable "LastLMotorCount" was declared but never referenced
+        static uint32_t LastLMotorCount = 0;
+Source\IntSample.c(204): warning:  #1-D: last line of file ends without a newline
+  }
+Source\IntSample.c(187): warning:  #177-D: variable "LastRMotorCount" was declared but never referenced
+        static uint32_t LastRMotorCount = 0;
+Source\IntSample.c: 6 warnings, 0 errors
+compiling RacingSM.c...
+.\Headers\RacingSM.h(31): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\InputCapture.h(23): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\DcMotorService.h(12): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\ToRegionSM.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\TopMaster.h(12): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\RacingSM.c(95): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(111): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(128): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(144): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(160): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(176): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(192): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(208): warning:  #223-D: function "PostKartSM" declared implicitly
+                                 PostKartSM(postEvent);
+Source\RacingSM.c(283): warning:  #1-D: last line of file ends without a newline
+  }
+Source\RacingSM.c(254): warning:  #177-D: function "DuringToRegion" was declared but never referenced
+  static ES_Event DuringToRegion( ES_Event Event)
+Source\RacingSM.c: 15 warnings, 0 errors
+compiling ToRegionSM.c...
+.\Headers\ToRegionSM.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\DCMotorService.h(12): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\ToRegionSM.c: 2 warnings, 0 errors
+compiling DCMotorService.c...
+.\Headers\DCMotorService.h(12): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\Init.h(105): warning:  #1-D: last line of file ends without a newline
+  #endif
+.\Headers\IntSample.h(16): warning:  #1-D: last line of file ends without a newline
+  #endif //_IntSample_H_
+.\Headers\MotorPWM.h(13): warning:  #1-D: last line of file ends without a newline
+  #endif
+Source\DCMotorService.c(64): warning:  #1-D: last line of file ends without a newline
+  }
+Source\DCMotorService.c: 5 warnings, 0 errors
+compiling EnablePA25_PB23_PD7_PF0.c...
+compiling ES_CheckEvents.c...
+compiling ES_DeferRecall.c...
+compiling ES_Framework.c...
+.\Headers\DrsSM.h(27): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\KartSM.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif 
+Source\ES_Framework.c: 2 warnings, 0 errors
+compiling ES_LookupTables.c...
+compiling ES_Port.c...
+compiling ES_PostList.c...
+.\Headers\DrsSM.h(27): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\KartSM.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif 
+Source\ES_PostList.c: 2 warnings, 0 errors
+compiling ES_Queue.c...
+compiling ES_Timers.c...
+.\Headers\DrsSM.h(27): warning:  #1-D: last line of file ends without a newline
+  #endif 
+.\Headers\KartSM.h(20): warning:  #1-D: last line of file ends without a newline
+  #endif 
+Source\ES_Timers.c: 2 warnings, 0 errors
+compiling retarget.c...
+compiling termio.c...
+compiling uartstdio.c...
+linking...
+.\Outputs\BaseTarget.axf: Error: L6218E: Undefined symbol StartDrsSM (referred from topmaster.o).
+Not enough information to list image symbols.
+Finished: 1 information, 0 warning and 1 error messages.
+".\Outputs\BaseTarget.axf" - 1 Error(s), 70 Warning(s).
+Target not created

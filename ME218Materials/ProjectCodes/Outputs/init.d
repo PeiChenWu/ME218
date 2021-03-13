@@ -1,0 +1,15 @@
+.\outputs\init.o: Source\Init.c
+.\outputs\init.o: .\Headers\Init.h
+.\outputs\init.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+.\outputs\init.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h
+.\outputs\init.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_memmap.h
+.\outputs\init.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_types.h
+.\outputs\init.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_gpio.h
+.\outputs\init.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_sysctl.h
+.\outputs\init.o: C:\ti\TivaWare_C_Series-2.1.0.12573\driverlib/gpio.h
+.\outputs\init.o: .\Headers\ADMulti.h
+.\outputs\init.o: .\Headers\MotorPWM.h
+.\outputs\init.o: .\Headers\SSI.h
+.\outputs\init.o: .\Headers\InputCapture.h
+.\outputs\init.o: .\Headers\IntSample.h
+.\outputs\init.o: .\Headers\EnablePA25_PB23_PD7_PF0.h

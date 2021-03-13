@@ -1,0 +1,877 @@
+L 1 "Source\ES_CheckEvents.c"
+N/****************************************************************************
+N Module
+N     ES_CheckEvents.c
+N Description
+N     source file for the module to call the User event checking routines
+N Notes
+N     Users should not modify the contents of this file.
+N History
+N When           Who     What/Why
+N -------------- ---     --------
+N                jec     out all user modifications into ES_Configure
+N 10/16/11 12:32 jec      started coding
+N*****************************************************************************/
+N
+N#include "ES_Configure.h"
+L 1 ".\Headers\ES_Configure.h" 1
+N/****************************************************************************
+N Module
+N     ES_Configure.h
+N Description
+N     This file contains macro definitions that are edited by the user to
+N     adapt the Events and Services framework to a particular application.
+N Notes
+N     
+N History
+N When           Who     What/Why
+N -------------- ---     --------
+N 10/21/13 20:54 jec      lots of added entries to bring the number of timers
+N                         and services up to 16 each
+N 08/06/13 14:10 jec      removed PostKeyFunc stuff since we are moving that
+N                         functionality out of the framework and putting it
+N                         explicitly into the event checking functions
+N 01/15/12 10:03 jec      started coding
+N*****************************************************************************/
+N
+N#ifndef CONFIGURE_H
+N#define CONFIGURE_H
+N
+N/****************************************************************************/
+N// The maximum number of services sets an upper bound on the number of 
+N// services that the framework will handle. Reasonable values are 8 and 16
+N// corresponding to an 8-bit(uint8_t) and 16-bit(uint16_t) Ready variable size
+N#define MAX_NUM_SERVICES 16
+N
+N/****************************************************************************/
+N// This macro determines that nuber of services that are *actually* used in
+N// a particular application. It will vary in value from 1 to MAX_NUM_SERVICES
+N#define NUM_SERVICES 1
+N
+N/****************************************************************************/
+N// These are the definitions for Service 0, the lowest priority service.
+N// Every Events and Services application must have a Service 0. Further 
+N// services are added in numeric sequence (1,2,3,...) with increasing 
+N// priorities
+N// the header file with the public function prototypes
+N#define SERV_0_HEADER "TestHarnessService0.h"
+N// the name of the Init function
+N#define SERV_0_INIT InitTestHarnessService0
+N// the name of the run function
+N#define SERV_0_RUN RunTestHarnessService0
+N// How big should this services Queue be?
+N#define SERV_0_QUEUE_SIZE 5
+N
+N/****************************************************************************/
+N// The following sections are used to define the parameters for each of the
+N// services. You only need to fill out as many as the number of services 
+N// defined by NUM_SERVICES
+N/****************************************************************************/
+N// These are the definitions for Service 1
+N#if NUM_SERVICES > 1
+X#if 1 > 1
+S// the header file with the public function prototypes
+S#define SERV_1_HEADER "TestHarnessService1.h"
+S// the name of the Init function
+S#define SERV_1_INIT InitTestHarnessService1
+S// the name of the run function
+S#define SERV_1_RUN RunTestHarnessService1
+S// How big should this services Queue be?
+S#define SERV_1_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 2
+N#if NUM_SERVICES > 2
+X#if 1 > 2
+S// the header file with the public function prototypes
+S#define SERV_2_HEADER "TestHarnessService2.h"
+S// the name of the Init function
+S#define SERV_2_INIT InitTestHarnessService2
+S// the name of the run function
+S#define SERV_2_RUN RunTestHarnessService2
+S// How big should this services Queue be?
+S#define SERV_2_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 3
+N#if NUM_SERVICES > 3
+X#if 1 > 3
+S// the header file with the public function prototypes
+S#define SERV_3_HEADER "TestHarnessService3.h"
+S// the name of the Init function
+S#define SERV_3_INIT InitTestHarnessService3
+S// the name of the run function
+S#define SERV_3_RUN RunTestHarnessService3
+S// How big should this services Queue be?
+S#define SERV_3_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 4
+N#if NUM_SERVICES > 4
+X#if 1 > 4
+S// the header file with the public function prototypes
+S#define SERV_4_HEADER "TestHarnessService4.h"
+S// the name of the Init function
+S#define SERV_4_INIT InitTestHarnessService4
+S// the name of the run function
+S#define SERV_4_RUN RunTestHarnessService4
+S// How big should this services Queue be?
+S#define SERV_4_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 5
+N#if NUM_SERVICES > 5
+X#if 1 > 5
+S// the header file with the public function prototypes
+S#define SERV_5_HEADER "TestHarnessService5.h"
+S// the name of the Init function
+S#define SERV_5_INIT InitTestHarnessService5
+S// the name of the run function
+S#define SERV_5_RUN RunTestHarnessService5
+S// How big should this services Queue be?
+S#define SERV_5_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 6
+N#if NUM_SERVICES > 6
+X#if 1 > 6
+S// the header file with the public function prototypes
+S#define SERV_6_HEADER "TestHarnessService6.h"
+S// the name of the Init function
+S#define SERV_6_INIT InitTestHarnessService6
+S// the name of the run function
+S#define SERV_6_RUN RunTestHarnessService6
+S// How big should this services Queue be?
+S#define SERV_6_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 7
+N#if NUM_SERVICES > 7
+X#if 1 > 7
+S// the header file with the public function prototypes
+S#define SERV_7_HEADER "TestHarnessService7.h"
+S// the name of the Init function
+S#define SERV_7_INIT InitTestHarnessService7
+S// the name of the run function
+S#define SERV_7_RUN RunTestHarnessService7
+S// How big should this services Queue be?
+S#define SERV_7_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 8
+N#if NUM_SERVICES > 8
+X#if 1 > 8
+S// the header file with the public function prototypes
+S#define SERV_8_HEADER "TestHarnessService8.h"
+S// the name of the Init function
+S#define SERV_8_INIT InitTestHarnessService8
+S// the name of the run function
+S#define SERV_8_RUN RunTestHarnessService8
+S// How big should this services Queue be?
+S#define SERV_8_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 9
+N#if NUM_SERVICES > 9
+X#if 1 > 9
+S// the header file with the public function prototypes
+S#define SERV_9_HEADER "TestHarnessService9.h"
+S// the name of the Init function
+S#define SERV_9_INIT InitTestHarnessService9
+S// the name of the run function
+S#define SERV_9_RUN RunTestHarnessService9
+S// How big should this services Queue be?
+S#define SERV_9_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 10
+N#if NUM_SERVICES > 10
+X#if 1 > 10
+S// the header file with the public function prototypes
+S#define SERV_10_HEADER "TestHarnessService10.h"
+S// the name of the Init function
+S#define SERV_10_INIT InitTestHarnessService10
+S// the name of the run function
+S#define SERV_10_RUN RunTestHarnessService10
+S// How big should this services Queue be?
+S#define SERV_10_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 11
+N#if NUM_SERVICES > 11
+X#if 1 > 11
+S// the header file with the public function prototypes
+S#define SERV_11_HEADER "TestHarnessService11.h"
+S// the name of the Init function
+S#define SERV_11_INIT InitTestHarnessService11
+S// the name of the run function
+S#define SERV_11_RUN RunTestHarnessService11
+S// How big should this services Queue be?
+S#define SERV_11_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 12
+N#if NUM_SERVICES > 12
+X#if 1 > 12
+S// the header file with the public function prototypes
+S#define SERV_12_HEADER "TestHarnessService12.h"
+S// the name of the Init function
+S#define SERV_12_INIT InitTestHarnessService12
+S// the name of the run function
+S#define SERV_12_RUN RunTestHarnessService12
+S// How big should this services Queue be?
+S#define SERV_12_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 13
+N#if NUM_SERVICES > 13
+X#if 1 > 13
+S// the header file with the public function prototypes
+S#define SERV_13_HEADER "TestHarnessService13.h"
+S// the name of the Init function
+S#define SERV_13_INIT InitTestHarnessService13
+S// the name of the run function
+S#define SERV_13_RUN RunTestHarnessService13
+S// How big should this services Queue be?
+S#define SERV_13_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 14
+N#if NUM_SERVICES > 14
+X#if 1 > 14
+S// the header file with the public function prototypes
+S#define SERV_14_HEADER "TestHarnessService14.h"
+S// the name of the Init function
+S#define SERV_14_INIT InitTestHarnessService14
+S// the name of the run function
+S#define SERV_14_RUN RunTestHarnessService14
+S// How big should this services Queue be?
+S#define SERV_14_QUEUE_SIZE 3
+N#endif
+N
+N/****************************************************************************/
+N// These are the definitions for Service 15
+N#if NUM_SERVICES > 15
+X#if 1 > 15
+S// the header file with the public function prototypes
+S#define SERV_15_HEADER "TestHarnessService15.h"
+S// the name of the Init function
+S#define SERV_15_INIT InitTestHarnessService15
+S// the name of the run function
+S#define SERV_15_RUN RunTestHarnessService15
+S// How big should this services Queue be?
+S#define SERV_15_QUEUE_SIZE 3
+N#endif
+N
+N
+N/****************************************************************************/
+N// Name/define the events of interest
+N// Universal events occupy the lowest entries, followed by user-defined events
+Ntypedef enum {  ES_NO_EVENT = 0,
+N                ES_ERROR,  /* used to indicate an error from the service */
+N                ES_INIT,   /* used to transition from initial pseudo-state */
+N                ES_TIMEOUT, /* signals that the timer has expired */
+N                /* User-defined events start here */
+N                ES_NEW_KEY, /* signals a new key received from terminal */
+N                ES_LOCK,
+N                ES_UNLOCK} ES_EventTyp_t ;
+N
+N/****************************************************************************/
+N// These are the definitions for the Distribution lists. Each definition
+N// should be a comma separated list of post functions to indicate which
+N// services are on that distribution list.
+N#define NUM_DIST_LISTS 1
+N#if NUM_DIST_LISTS > 0 
+X#if 1 > 0 
+N#define DIST_LIST0 PostTestHarnessService0, PostTestHarnessService0
+N#endif
+N#if NUM_DIST_LISTS > 1 
+X#if 1 > 1 
+S#define DIST_LIST1 PostTestHarnessService1, PostTestHarnessService1
+N#endif
+N#if NUM_DIST_LISTS > 2 
+X#if 1 > 2 
+S#define DIST_LIST2 PostTemplateFSM
+N#endif
+N#if NUM_DIST_LISTS > 3 
+X#if 1 > 3 
+S#define DIST_LIST3 PostTemplateFSM
+N#endif
+N#if NUM_DIST_LISTS > 4 
+X#if 1 > 4 
+S#define DIST_LIST4 PostTemplateFSM
+N#endif
+N#if NUM_DIST_LISTS > 5 
+X#if 1 > 5 
+S#define DIST_LIST5 PostTemplateFSM
+N#endif
+N#if NUM_DIST_LISTS > 6 
+X#if 1 > 6 
+S#define DIST_LIST6 PostTemplateFSM
+N#endif
+N#if NUM_DIST_LISTS > 7 
+X#if 1 > 7 
+S#define DIST_LIST7 PostTemplateFSM
+N#endif
+N
+N/****************************************************************************/
+N// This are the name of the Event checking funcion header file. 
+N#define EVENT_CHECK_HEADER "EventCheckers.h"
+N
+N/****************************************************************************/
+N// This is the list of event checking functions 
+N#define EVENT_CHECK_LIST Check4Keystroke
+N
+N/****************************************************************************/
+N// These are the definitions for the post functions to be executed when the
+N// corresponding timer expires. All 16 must be defined. If you are not using
+N// a timer, then you should use TIMER_UNUSED
+N// Unlike services, any combination of timers may be used and there is no
+N// priority in servicing them
+N#define TIMER_UNUSED ((pPostFunc)0)
+N#define TIMER0_RESP_FUNC TIMER_UNUSED
+N#define TIMER1_RESP_FUNC TIMER_UNUSED
+N#define TIMER2_RESP_FUNC TIMER_UNUSED
+N#define TIMER3_RESP_FUNC TIMER_UNUSED
+N#define TIMER4_RESP_FUNC TIMER_UNUSED
+N#define TIMER5_RESP_FUNC TIMER_UNUSED
+N#define TIMER6_RESP_FUNC TIMER_UNUSED
+N#define TIMER7_RESP_FUNC TIMER_UNUSED
+N#define TIMER8_RESP_FUNC TIMER_UNUSED
+N#define TIMER9_RESP_FUNC TIMER_UNUSED
+N#define TIMER10_RESP_FUNC TIMER_UNUSED
+N#define TIMER11_RESP_FUNC TIMER_UNUSED
+N#define TIMER12_RESP_FUNC TIMER_UNUSED
+N#define TIMER13_RESP_FUNC TIMER_UNUSED
+N#define TIMER14_RESP_FUNC TIMER_UNUSED
+N#define TIMER15_RESP_FUNC PostTestHarnessService0
+N
+N/****************************************************************************/
+N// Give the timer numbers symbolc names to make it easier to move them
+N// to different timers if the need arises. Keep these definitions close to the
+N// definitions for the response functions to make it easier to check that
+N// the timer number matches where the timer event will be routed
+N// These symbolic names should be changed to be relevant to your application 
+N
+N#define SERVICE0_TIMER 15
+N
+N#endif /* CONFIGURE_H */
+L 16 "Source\ES_CheckEvents.c" 2
+N#include "ES_Events.h"
+L 1 ".\Headers\ES_Events.h" 1
+N/****************************************************************************
+N Module
+N     ES_Events.h
+N Description
+N     header file with definitions for the event structure 
+N Notes
+N
+N History
+N When           Who     What/Why
+N -------------- ---     --------
+N 08/05/13 15:19 jec      modifications to suit new portable type definitions
+N 01/15/12 11:46 jec      moved event enum to config file, changed prefixes to ES
+N 10/23/11 22:01 jec      customized for Remote Lock problem
+N 10/17/11 08:47 jec      changed event prefixes to EF_ to match new framework
+N 08/09/06 14:30 jec      started coding
+N*****************************************************************************/
+N
+N#ifndef ES_Events_H
+N#define ES_Events_H
+N
+N#include "ES_Types.h"
+L 1 ".\Headers\ES_Types.h" 1
+N/****************************************************************************
+N Module
+N     ES_Types.h
+N Description
+N     header file to provide generally used types for the Events  & Services 
+N     Framework. Most of these come from stdint.h, and stdbool.h on compilers
+N     that support C99
+N Notes
+N
+N History
+N When           Who     What/Why
+N -------------- ---     --------
+N 08/05/13 14:24 jec      converted to take advantage of C99 compilers if avail
+N                         and if not to define the subset that we use.
+N 10/17/11 07:49 jec      new header to match the rest of the framework
+N 08/09/11 09:30 jec      started coding
+N*****************************************************************************/
+N#ifndef ES_TYPES_H
+N#define ES_TYPES_H
+N
+N/* Standard ANSI  99 C types for exact integer sizes*/
+N#ifdef COMPILER_IS_C99
+S#include <stdint.h>
+N#else  /* use the open source version included with ES framework */
+N#include "stdint.h"
+L 1 "C:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h" 1
+N/* Copyright (C) ARM Ltd., 1999 */
+N/* All rights reserved */
+N
+N/*
+N * RCS $Revision: 180721 $
+N * Checkin $Date: 2013-06-24 09:41:57 +0100 (Mon, 24 Jun 2013) $
+N * Revising $Author: agrant $
+N */
+N
+N#ifndef __stdint_h
+N#define __stdint_h
+N#define __ARMCLIB_VERSION 5040049
+N
+N/*
+N * Depending on compiler version __int64 or __INT64_TYPE__ should be defined.
+N */
+N#ifndef __int64
+N  #ifdef __INT64_TYPE__
+S    #define __int64 __INT64_TYPE__
+N  #endif
+N  /* On some architectures neither of these may be defined - if so, fall
+N     through and error out if used. */
+N#endif
+N
+N  #ifndef __STDINT_DECLS
+N  #define __STDINT_DECLS
+N
+N    #undef __CLIBNS
+N
+N    #ifdef __cplusplus
+S      namespace std {
+S          #define __CLIBNS std::
+S          extern "C" {
+N    #else
+N      #define __CLIBNS
+N    #endif  /* __cplusplus */
+N
+N
+N/*
+N * 'signed' is redundant below, except for 'signed char' and if
+N * the typedef is used to declare a bitfield.
+N * '__int64' is used instead of 'long long' so that this header
+N * can be used in --strict mode.
+N */
+N
+N    /* 7.18.1.1 */
+N
+N    /* exact-width signed integer types */
+Ntypedef   signed          char int8_t;
+Ntypedef   signed short     int int16_t;
+Ntypedef   signed           int int32_t;
+Ntypedef   signed       __int64 int64_t;
+N
+N    /* exact-width unsigned integer types */
+Ntypedef unsigned          char uint8_t;
+Ntypedef unsigned short     int uint16_t;
+Ntypedef unsigned           int uint32_t;
+Ntypedef unsigned       __int64 uint64_t;
+N
+N    /* 7.18.1.2 */
+N
+N    /* smallest type of at least n bits */
+N    /* minimum-width signed integer types */
+Ntypedef   signed          char int_least8_t;
+Ntypedef   signed short     int int_least16_t;
+Ntypedef   signed           int int_least32_t;
+Ntypedef   signed       __int64 int_least64_t;
+N
+N    /* minimum-width unsigned integer types */
+Ntypedef unsigned          char uint_least8_t;
+Ntypedef unsigned short     int uint_least16_t;
+Ntypedef unsigned           int uint_least32_t;
+Ntypedef unsigned       __int64 uint_least64_t;
+N
+N    /* 7.18.1.3 */
+N
+N    /* fastest minimum-width signed integer types */
+Ntypedef   signed           int int_fast8_t;
+Ntypedef   signed           int int_fast16_t;
+Ntypedef   signed           int int_fast32_t;
+Ntypedef   signed       __int64 int_fast64_t;
+N
+N    /* fastest minimum-width unsigned integer types */
+Ntypedef unsigned           int uint_fast8_t;
+Ntypedef unsigned           int uint_fast16_t;
+Ntypedef unsigned           int uint_fast32_t;
+Ntypedef unsigned       __int64 uint_fast64_t;
+N
+N    /* 7.18.1.4 integer types capable of holding object pointers */
+Ntypedef   signed           int intptr_t;
+Ntypedef unsigned           int uintptr_t;
+N
+N    /* 7.18.1.5 greatest-width integer types */
+Ntypedef   signed       __int64 intmax_t;
+Ntypedef unsigned       __int64 uintmax_t;
+N
+N
+N#if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.2.1 */
+N
+N    /* minimum values of exact-width signed integer types */
+N#define INT8_MIN                   -128
+N#define INT16_MIN                -32768
+N#define INT32_MIN          (~0x7fffffff)   /* -2147483648 is unsigned */
+N#define INT64_MIN  __ESCAPE__(~0x7fffffffffffffffll) /* -9223372036854775808 is unsigned */
+N
+N    /* maximum values of exact-width signed integer types */
+N#define INT8_MAX                    127
+N#define INT16_MAX                 32767
+N#define INT32_MAX            2147483647
+N#define INT64_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum values of exact-width unsigned integer types */
+N#define UINT8_MAX                   255
+N#define UINT16_MAX                65535
+N#define UINT32_MAX           4294967295u
+N#define UINT64_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.2.2 */
+N
+N    /* minimum values of minimum-width signed integer types */
+N#define INT_LEAST8_MIN                   -128
+N#define INT_LEAST16_MIN                -32768
+N#define INT_LEAST32_MIN          (~0x7fffffff)
+N#define INT_LEAST64_MIN  __ESCAPE__(~0x7fffffffffffffffll)
+N
+N    /* maximum values of minimum-width signed integer types */
+N#define INT_LEAST8_MAX                    127
+N#define INT_LEAST16_MAX                 32767
+N#define INT_LEAST32_MAX            2147483647
+N#define INT_LEAST64_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum values of minimum-width unsigned integer types */
+N#define UINT_LEAST8_MAX                   255
+N#define UINT_LEAST16_MAX                65535
+N#define UINT_LEAST32_MAX           4294967295u
+N#define UINT_LEAST64_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.2.3 */
+N
+N    /* minimum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MIN           (~0x7fffffff)
+N#define INT_FAST16_MIN          (~0x7fffffff)
+N#define INT_FAST32_MIN          (~0x7fffffff)
+N#define INT_FAST64_MIN  __ESCAPE__(~0x7fffffffffffffffll)
+N
+N    /* maximum values of fastest minimum-width signed integer types */
+N#define INT_FAST8_MAX             2147483647
+N#define INT_FAST16_MAX            2147483647
+N#define INT_FAST32_MAX            2147483647
+N#define INT_FAST64_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum values of fastest minimum-width unsigned integer types */
+N#define UINT_FAST8_MAX            4294967295u
+N#define UINT_FAST16_MAX           4294967295u
+N#define UINT_FAST32_MAX           4294967295u
+N#define UINT_FAST64_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.2.4 */
+N
+N    /* minimum value of pointer-holding signed integer type */
+N#define INTPTR_MIN (~0x7fffffff)
+N
+N    /* maximum value of pointer-holding signed integer type */
+N#define INTPTR_MAX   2147483647
+N
+N    /* maximum value of pointer-holding unsigned integer type */
+N#define UINTPTR_MAX  4294967295u
+N
+N    /* 7.18.2.5 */
+N
+N    /* minimum value of greatest-width signed integer type */
+N#define INTMAX_MIN  __ESCAPE__(~0x7fffffffffffffffll)
+N
+N    /* maximum value of greatest-width signed integer type */
+N#define INTMAX_MAX  __ESCAPE__(9223372036854775807ll)
+N
+N    /* maximum value of greatest-width unsigned integer type */
+N#define UINTMAX_MAX __ESCAPE__(18446744073709551615ull)
+N
+N    /* 7.18.3 */
+N
+N    /* limits of ptrdiff_t */
+N#define PTRDIFF_MIN (~0x7fffffff)
+N#define PTRDIFF_MAX   2147483647
+N
+N    /* limits of sig_atomic_t */
+N#define SIG_ATOMIC_MIN (~0x7fffffff)
+N#define SIG_ATOMIC_MAX   2147483647
+N
+N    /* limit of size_t */
+N#define SIZE_MAX 4294967295u
+N
+N    /* limits of wchar_t */
+N    /* NB we have to undef and redef because they're defined in both
+N     * stdint.h and wchar.h */
+N#undef WCHAR_MIN
+N#undef WCHAR_MAX
+N
+N#if defined(__WCHAR32) || (defined(__ARM_SIZEOF_WCHAR_T) && __ARM_SIZEOF_WCHAR_T == 4)
+X#if 0L || (0L && __ARM_SIZEOF_WCHAR_T == 4)
+S  #define WCHAR_MIN   0
+S  #define WCHAR_MAX   0xffffffffU
+N#else
+N  #define WCHAR_MIN   0
+N  #define WCHAR_MAX   65535
+N#endif
+N
+N    /* limits of wint_t */
+N#define WINT_MIN (~0x7fffffff)
+N#define WINT_MAX 2147483647
+N
+N#endif /* __STDC_LIMIT_MACROS */
+N
+N#if !defined(__cplusplus) || defined(__STDC_CONSTANT_MACROS)
+X#if !0L || 0L
+N
+N    /* 7.18.4.1 macros for minimum-width integer constants */
+N#define INT8_C(x)   (x)
+N#define INT16_C(x)  (x)
+N#define INT32_C(x)  (x)
+N#define INT64_C(x)  __ESCAPE__(x ## ll)
+N
+N#define UINT8_C(x)  (x ## u)
+N#define UINT16_C(x) (x ## u)
+N#define UINT32_C(x) (x ## u)
+N#define UINT64_C(x) __ESCAPE__(x ## ull)
+N
+N    /* 7.18.4.2 macros for greatest-width integer constants */
+N#define INTMAX_C(x)  __ESCAPE__(x ## ll)
+N#define UINTMAX_C(x) __ESCAPE__(x ## ull)
+N
+N#endif /* __STDC_CONSTANT_MACROS */
+N
+N    #ifdef __cplusplus
+S         }  /* extern "C" */
+S      }  /* namespace std */
+N    #endif /* __cplusplus */
+N  #endif /* __STDINT_DECLS */
+N
+N  #ifdef __cplusplus
+S    #ifndef __STDINT_NO_EXPORTS
+S      using ::std::int8_t;
+S      using ::std::int16_t;
+S      using ::std::int32_t;
+S      using ::std::int64_t;
+S      using ::std::uint8_t;
+S      using ::std::uint16_t;
+S      using ::std::uint32_t;
+S      using ::std::uint64_t;
+S      using ::std::int_least8_t;
+S      using ::std::int_least16_t;
+S      using ::std::int_least32_t;
+S      using ::std::int_least64_t;
+S      using ::std::uint_least8_t;
+S      using ::std::uint_least16_t;
+S      using ::std::uint_least32_t;
+S      using ::std::uint_least64_t;
+S      using ::std::int_fast8_t;
+S      using ::std::int_fast16_t;
+S      using ::std::int_fast32_t;
+S      using ::std::int_fast64_t;
+S      using ::std::uint_fast8_t;
+S      using ::std::uint_fast16_t;
+S      using ::std::uint_fast32_t;
+S      using ::std::uint_fast64_t;
+S      using ::std::intptr_t;
+S      using ::std::uintptr_t;
+S      using ::std::intmax_t;
+S      using ::std::uintmax_t;
+S    #endif 
+N  #endif /* __cplusplus */
+N
+N#endif /* __stdint_h */
+N
+N/* end of stdint.h */
+N
+N
+N
+L 26 ".\Headers\ES_Types.h" 2
+N#endif
+N
+N
+N/* Standard ANSI  99 C types for booleans, true & false*/
+N/* must come after stdint.h because the emulation uses uint8_t */
+N#ifdef COMPILER_IS_C99
+S#include <stdbool.h>
+N#else   // provide C99 compliant definitions
+N#include "stdbool.h"
+L 1 "C:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h" 1
+N/* stdbool.h: ISO/IEC 9899:1999 (C99), section 7.16 */
+N
+N/* Copyright (C) ARM Ltd., 2002
+N * All rights reserved
+N * RCS $Revision: 177844 $
+N * Checkin $Date: 2012-11-21 11:51:12 +0000 (Wed, 21 Nov 2012) $
+N * Revising $Author: drodgman $
+N */
+N
+N#ifndef __bool_true_false_are_defined
+N#define __bool_true_false_are_defined 1
+N#define __ARMCLIB_VERSION 5040049
+N
+N  #ifndef __cplusplus /* In C++, 'bool', 'true' and 'false' and keywords */
+N    #define bool _Bool
+N    #define true 1
+N    #define false 0
+N  #else
+S    #ifdef __GNUC__
+S      /* GNU C++ supports direct inclusion of stdbool.h to provide C99
+S         compatibility by defining _Bool */
+S      #define _Bool bool
+S    #endif
+N  #endif
+N
+N#endif /* __bool_true_false_are_defined */
+N
+L 35 ".\Headers\ES_Types.h" 2
+N#endif
+N
+N
+N#endif /* ES_TYPES_H */
+L 22 ".\Headers\ES_Events.h" 2
+N
+Ntypedef struct ES_Event_t {
+N    ES_EventTyp_t EventType;    // what kind of event?
+N    uint16_t   EventParam;      // parameter value for use w/ this event
+N}ES_Event;
+N
+N
+N#endif /* ES_Events_H */
+L 17 "Source\ES_CheckEvents.c" 2
+N#include "ES_General.h"
+L 1 ".\Headers\ES_General.h" 1
+N#ifndef ES_General_H
+N#define ES_General_H
+N
+N#define ARRAY_SIZE(x)  (sizeof(x)/sizeof(x[0]))
+N
+N#define BITS_PER_BYTE 8
+N#define BITS_PER_NYBBLE 4
+N
+N#endif//ES_General_H
+L 18 "Source\ES_CheckEvents.c" 2
+N#include "ES_CheckEvents.h"
+L 1 ".\Headers\ES_CheckEvents.h" 1
+N/****************************************************************************
+N Module
+N     EF_CheckEvents.h
+N Description
+N     header file for use with the data structures to define the event checking
+N     functions and the function to loop through the array calling the checkers
+N Notes
+N
+N History
+N When           Who     What/Why
+N -------------- ---     --------
+N 08/05/13 15:19 jec      modifications to suit new portable type definitions
+N 01/15/12 12:00 jec      new header for local types
+N 10/16/11 17:17 jec      started coding
+N*****************************************************************************/
+N
+N#ifndef ES_CheckEvents_H
+N#define ES_CheckEvents_H
+N
+N#include "ES_Types.h"
+N
+Ntypedef bool CheckFunc( void );
+Xtypedef _Bool CheckFunc( void );
+N
+Ntypedef CheckFunc (*pCheckFunc);
+N
+Nbool ES_CheckUserEvents( void );
+X_Bool ES_CheckUserEvents( void );
+N
+N
+N#endif  // ES_CheckEvents_H
+L 19 "Source\ES_CheckEvents.c" 2
+N
+N// Include the header files for the module(s) with your event checkers. 
+N// This gets you the prototypes for the event checking functions.
+N
+N#include EVENT_CHECK_HEADER
+X#include "EventCheckers.h"
+L 1 ".\Headers\EventCheckers.h" 1
+N/****************************************************************************
+N Module
+N     EventCheckers.h
+N Description
+N     header file for the event checking functions
+N Notes
+N
+N History
+N When           Who     What/Why
+N -------------- ---     --------
+N 08/06/13 14:37 jec      started coding
+N*****************************************************************************/
+N
+N#ifndef EventCheckers_H
+N#define EventCheckers_H
+N
+N// prototypes for event checkers
+N
+Nbool Check4Keystroke(void);
+X_Bool Check4Keystroke(void);
+N
+N
+N#endif /* EventCheckers_H */
+L 24 "Source\ES_CheckEvents.c" 2
+N
+N// Fill in this array with the names of your event checking functions
+N
+Nstatic CheckFunc * const ES_EventList[]={EVENT_CHECK_LIST };
+Xstatic CheckFunc * const ES_EventList[]={Check4Keystroke };
+N
+N
+N// Implementation for public functions
+N
+N/****************************************************************************
+N Function
+N   ES_CheckUserEvents
+N Parameters
+N   None
+N Returns
+N   bool: true if any of the user event checkers returned true, false otherwise
+N Description
+N   loop through the EF_EventList array executing the event checking functions
+N Notes
+N   
+N Author
+N   J. Edward Carryer, 10/25/11, 08:55
+N****************************************************************************/
+Nbool ES_CheckUserEvents( void ) 
+X_Bool ES_CheckUserEvents( void ) 
+N{
+N  uint8_t i;
+N  // loop through the array executing the event checking functions
+N  for ( i=0; i< ARRAY_SIZE(ES_EventList); i++) {
+X  for ( i=0; i< (sizeof(ES_EventList)/sizeof(ES_EventList[0])); i++) {
+N    if ( ES_EventList[i]() == true )
+X    if ( ES_EventList[i]() == 1 )
+N      break; // found a new event, so process it first
+N  }
+N  if ( i == ARRAY_SIZE(ES_EventList) ) // if no new events
+X  if ( i == (sizeof(ES_EventList)/sizeof(ES_EventList[0])) ) 
+N    return (false);
+X    return (0);
+N  else
+N    return(true);
+X    return(1);
+N}
+N/*------------------------------- Footnotes -------------------------------*/
+N/*------------------------------ End of file ------------------------------*/

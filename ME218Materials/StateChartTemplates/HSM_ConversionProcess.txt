@@ -1,0 +1,92 @@
+Steps in converting HSMTemplate into Watch application
+
+Copy UVFrameworkHSMTemplate folder to UVFrameworkWatch
+Rename the UVFrameworkHSMTemplate.* files to UVFrameworkWatch.*
+
+In UVWatch\Headers
+rename TopHSMTemplate.h TopWatch.h
+rename HSMTemplate.h TimeKeeping.h
+copy TimeKeeping.h ModeSetting.h
+
+In UVWatch\Source
+rename HSMTemplateMain.c WatchMain.c
+rename TopHSMTemplate.c TopWatch.c
+rename HSMTemplate.c TimeKeeping.c
+copy TimeKeeping.c ModeSetting.c
+
+Open UVFrameworkWatch.uvproj in Keil
+Remove from Headers TopHSMTemplate.h & HSMTemplate.h
+Remove from Source TopHSMTemplate.c , & HSMTemplate.c
+Remove from Main HSMTemplateMain.c 
+Add to Main WatchMain.c
+Add to Headers TopWatch.h and TimeKeeping.h
+
+
+Edit WatchMain.c to change logon message and, if necessary, modify the tick 
+  rate in the framework initialization call
+  
+; we will be working on Timekeeping.c first, but we need a way to funnel 
+;events to it so we will be editing TopWatch.c to do that during development
+Add to Source TopWatch.c & Timekeeping.c 
+
+Edit TimeKeeping.c to change references to HSMTemplate to TimeKeeping 
+and references to TemplateSM to TimeKeepingSM
+
+Edit TopWatch.c to change reference to TopHSMTemplate to TopWatch
+
+Edit ES_Configure.h to change references to TopHSMTemplate to TopWatch
+Edit MapKeys.c to change references to TopHSMTemplate to TopWatch
+
+Edit TopWatch.c to change references to StateOne to TimeKeeping
+Edit TopWatch.c to change references to STATE_ONE to STATE_TimeKeeping
+Edit TopWatch.h to change references to STATE_ONE to STATE_TimeKeeping
+
+It should compile cleanly at this point
+
+Edit ES_Configure to add the new events for this application (ES_TickEVT, ES_ModeEVT and ES_SetEVT)
+Edit TopWatch to respond to ES_TickEVT with a self-transition to STATE_TimeKeeping. 
+
+Edit TimeKeeping.h to change references to HSMTemplate_H to TimeKeeping.h
+Edit TimeKeeping.h to make function prototypes to reference TimeKeeping instead of Template
+Edit TimeKeeping.h to change the state enum to list STATE_TimeDisplay and STATE_DateDisplay
+Edit TimeKeeping.h add a new state STATE_Uninitialized to facilitate handling the history state
+Edit TimeKeeping.c to initialize CurrentState to STATE_Uniniitialized
+Edit TimeKeeping.c to change references to TemplateSM to TimeKeepingSM in functions
+Edit TimeKeeping.c change the nested switch:case in RunTimeKeeping to the form to implement
+  the 2-state statemachine for TimeKeeping
+Edit TimeKeeping.c to implement the during functions for DuringDisplayTime and DuringDisplayDate
+  
+Create module to keep track of the contents of the time variables and display them
+Add this module to the project
+
+Add calls to DisplayTime and DisplayDate to the during functions for DuringSidplayTime 
+  and DuringDisplayDate
+  
+Modify MapKeys.c to generate the ES_TickEVT, ES_ModeEVT and ES_SetEVT events
+  
+Ready to test TimeKeepingSM
+
+Edit DisplayTime.c to add routines to display, Hour, Min, Sec, Day, Month, Year in 
+preparation for adding the SettingAM
+
+Copy TimeKeeping.c to TimeSetting.c
+copy TimeKeeping.h to TimeSetting.h
+
+Add TimeSetting.c & TimeSetting.h to the project in the appropriate folders
+
+edit TimeSetting.h to adjust function names for TimeSetting rather than TimeKeeping
+
+Edit TimeSetting.c to implement the state machine for time setting
+
+Edit TopWatch.c to add a state for TimeSetting and initialize into that state
+Edit TopWatch.h to define the STATE_TimeSetting state
+
+Test Time setting
+
+Edit TopWatch to add the responses to the ES_SetEVT to switch between TimeKeeping and TimeSetting
+
+Test TopWatch by using key events
+
+Add Timer init & re-init to TopWatch to make it keep time on its own
+
+ 

@@ -1,0 +1,91 @@
+	/*----------------------------- Include Files -----------------------------*/
+	/* include header files for this state machine as well as any machines at the
+		 next lower level in the hierarchy that are sub-machines to this machine
+	*/
+	#include "ES_Configure.h"
+	#include "ES_Framework.h"
+	#include "TopMaster.h"
+	#include "DrsSM.h"
+	#include "KartSM.h"
+
+	/*----------------------------- Module Defines ----------------------------*/
+
+	/*---------------------------- Module Functions ---------------------------*/
+	static ES_Event DuringMaster( ES_Event Event);
+
+	/*---------------------------- Module Variables ---------------------------*/
+	static uint8_t MyPriority;
+
+	/*------------------------------ Module Code ------------------------------*/
+	bool InitMasterSM ( uint8_t Priority )
+	{
+		ES_Event ThisEvent;
+
+		MyPriority = Priority;  // save our priority
+
+		ThisEvent.EventType = ES_ENTRY;
+		// Start the Master State machine
+
+		StartMasterSM( ThisEvent );
+
+		return true;
+	}
+
+
+	bool PostMasterSM( ES_Event ThisEvent )
+	{
+		return ES_PostToService( MyPriority, ThisEvent);
+	}
+
+
+	ES_Event RunMasterSM( ES_Event CurrentEvent )
+	{
+		 bool MakeTransition = false;/* are we making a state transition? */
+		 ES_Event EntryEventKind = { ES_ENTRY, 0 };// default to normal entry to new state
+		 ES_Event ReturnEvent = { ES_NO_EVENT, 0 }; // assume no error
+
+		 // start by passing events to the lower level machines
+		 // this is the 'during' function for this machine
+		 CurrentEvent = DuringMaster(CurrentEvent);
+		
+		 printf("\r\n Running Master SM");
+		 
+		 return (ReturnEvent);
+	}
+
+	void StartMasterSM ( ES_Event CurrentEvent )
+	{
+
+		RunMasterSM(CurrentEvent);
+		return;
+	}
+
+
+	/***************************************************************************
+	 private functions
+	 ***************************************************************************/
+
+	static ES_Event DuringMaster( ES_Event Event)
+	{
+
+	 // process ES_ENTRY & ES_EXIT events
+	 if ( Event.EventType == ES_ENTRY)
+	 {
+	 // implement any entry actions required for this state machine
+	 // after that start any lower level machines that run in this state
+	 StartKartSM(Event);
+	 //StartDrsSM(Event);
+	 }
+	 else if ( Event.EventType == ES_EXIT)
+	 {
+	 RunKartSM(Event);
+	 RunDrsSM(Event);
+	 }
+	 else
+	 // do the 'during' function for this state
+	 {
+	 RunKartSM(Event);
+	 RunDrsSM(Event);
+	 }
+	 return(Event); 
+	}

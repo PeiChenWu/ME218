@@ -1,0 +1,26 @@
+#include "BeaconSensingService.h"
+#include "Init.h"
+#include "IntSample.h"
+#include "MotorPWM.h"
+#include "ADMulti.h"
+
+#include <stdio.h>
+#include <termio.h>
+
+uint32_t ReadBeaconValue(void)
+{
+	uint32_t results[4];
+	static uint32_t BeaconValue = 0;
+	
+	//Read the peak detection output
+	ADC_MultiRead(results);
+	BeaconValue = results[0];
+	
+	return BeaconValue;
+}
+
+void ResetPeakDetection(void)
+{
+	//Set PB5 HI
+	HWREG(BEACON_DATA) |= (BEACON_PIN);
+}

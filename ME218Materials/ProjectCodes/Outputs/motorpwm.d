@@ -1,0 +1,10 @@
+.\outputs\motorpwm.o: Source\MotorPWM.c
+.\outputs\motorpwm.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_memmap.h
+.\outputs\motorpwm.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_gpio.h
+.\outputs\motorpwm.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_pwm.h
+.\outputs\motorpwm.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_sysctl.h
+.\outputs\motorpwm.o: C:\ti\TivaWare_C_Series-2.1.0.12573\inc/hw_types.h
+.\outputs\motorpwm.o: .\Headers\bitdefs.h
+.\outputs\motorpwm.o: .\Headers\MotorPWM.h
+.\outputs\motorpwm.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+.\outputs\motorpwm.o: C:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h

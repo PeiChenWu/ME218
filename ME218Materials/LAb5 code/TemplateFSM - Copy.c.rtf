@@ -1,0 +1,146 @@
+{\rtf1\ansi\uc0 \deff1{\fonttbl{\f1\fmodern\fprq1\fcharset0 Courier New;}}{\colortbl;\red255\green255\blue255;\red00\green00\blue00;\red255\green00\blue00;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue255;\red255\green34\blue255;\red255\green34\blue255;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue00;\red255\green34\blue255;\red178\green104\blue24;\red00\green255\blue00;\red178\green104\blue24;\red00\green00\blue00;}
+{\stylesheet{
+{\*\cs2\additive\cf2\f1\fs20\sbasedon222\snext0 HL Default;}
+{\*\cs3\additive\cf3\f1\fs20\sbasedon222\snext0 HL String;}
+{\*\cs4\additive\cf4\f1\fs20\sbasedon222\snext0 HL Number;}
+{\*\cs5\additive\cf5\f1\fs20\sbasedon222\snext0 HL SL Comment;}
+{\*\cs6\additive\cf6\f1\fs20\sbasedon222\snext0 HL ML Comment;}
+{\*\cs7\additive\cf7\f1\fs20\sbasedon222\snext0 HL Escape Character;}
+{\*\cs8\additive\cf8\f1\fs20\sbasedon222\snext0 HL Directive;}
+{\*\cs9\additive\cf9\f1\fs20\sbasedon222\snext0 HL Directive String;}
+{\*\cs10\additive\cf10\f1\fs20\sbasedon222\snext0 HL Line;}
+{\*\cs11\additive\cf11\f1\fs20\sbasedon222\snext0 HL Operator;}
+{\*\cs12\additive\cf12\f1\fs20\sbasedon222\snext0 HL Interpolation;}
+{\*\cs13\additive\cf13\f1\fs20\sbasedon222\snext0 HL Keyword A;}
+{\*\cs14\additive\cf14\f1\fs20\sbasedon222\snext0 HL Keyword B;}
+{\*\cs15\additive\cf15\f1\fs20\sbasedon222\snext0 HL Keyword C;}
+{\*\cs16\additive\cf16\f1\fs20\sbasedon222\snext0 HL Keyword D;}
+}}
+\paperw11905\paperh16837\margl1134\margr1134\margt1134\margb1134\sectd\plain\f1\fs20
+\pard \cbpat1{{\*\cs2\cf2{ADService Module}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Define the valuables the Service needs}}{\*\cs11\cf11{:}}}\par\pard
+\cbpat1{{\*\cs2\cf2{define}} {\*\cs14\cf14{static}} {\*\cs2\cf2{varialbe CurrentState}}{\*\cs11\cf11{,}} {\*\cs2\cf2{ADServicePriority}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{define module global valuable}} {\*\cs14\cf14{unsigned int}}{\*\cs2\cf2{}}{\*\cs11\cf11{:}}}\par\pard
+\cbpat1{{\*\cs2\cf2{AD_COUNT}}{\*\cs11\cf11{,}} {\*\cs2\cf2{STEP_COUNT PotentioMeterValue}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs13\cf13{and}} {\*\cs2\cf2{initialize these valuables}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{Define the different four kinds of driving motor}\par\pard
+\cbpat1{FullStepDrive is}} {\*\cs4\cf4{{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{WaveDriveDrive is}} {\*\cs4\cf4{{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{HalfStepDrive is}} {\*\cs4\cf4{{2}}} {\*\cs2\cf2{}}{\*\cs13\cf13{and}} {\*\cs2\cf2{MicroStepDrive is}} {\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{InitADService}\par\pard
+\cbpat1{	Init PE{0} as analog input pin}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{	Start ADTimer}}{\*\cs11\cf11{,}} {\*\cs2\cf2{StepTimer}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{if}} {\*\cs2\cf2{no errors in initialization}} {\*\cs13\cf13{return true}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{else return false}}}\par\pard
+\cbpat1{{\*\cs2\cf2{End}\par\pard
+\cbpat1{	}\par\pard
+\cbpat1{RunADService}\par\pard
+\cbpat1{	Declare ES_Event PostEvent}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{if}} {\*\cs2\cf2{ThisEvent is ES_TIMEOUT}}}\par\pard
+\cbpat1{		{\*\cs13\cf13{if}} {\*\cs2\cf2{EventParam is equal to ADTimer}\par\pard
+\cbpat1{			Analog read PE{0}}\par\pard
+\cbpat1{			Initialize ADTimer}\par\pard
+\cbpat1{		END}}}\par\pard
+\cbpat1{	{\*\cs13\cf13{else if}} {\*\cs2\cf2{ThisEvent is StepTimer}\par\pard
+\cbpat1{				EventParam of PostEvent is FullStepDrive}}{\*\cs11\cf11{/}}{\*\cs2\cf2{WaveDrive}}{\*\cs11\cf11{/}}{\*\cs2\cf2{HalfStepDrive}}{\*\cs11\cf11{/}}{\*\cs2\cf2{MicroStepDrive}}}\par\pard
+\cbpat1{				{\*\cs6\cf6{/* There are four different kinds of motor drive method*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{				{\*\cs5\cf5{// {3}{6}{0}{0}/{4}{0}{5}{0} ~ {9}{0}%, so if potentiovalue is larger than {3}{6}{0}{0}, than it's the maximum motor speed.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}				{\*\cs13\cf13{if}} {\*\cs2\cf2{Event is FullStepDrive}} {\*\cs13\cf13{or}} {\*\cs2\cf2{WaveDrive}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{if}} {\*\cs2\cf2{PotentioMeterValue is}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{6}{0}{0}}} {\*\cs2\cf2{}}{\*\cs13\cf13{and}} {\*\cs2\cf2{}}{\*\cs11\cf11{>}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}} }\par\pard
+\cbpat1{{\*\cs2\cf2{							STEP_COUNT}} {\*\cs11\cf11{= (}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{7}{0}{0}}} {\*\cs2\cf2{}}{\*\cs11\cf11{/ (}}{\*\cs2\cf2{PotentioMeterValue}}{\*\cs11\cf11{+}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{))*}}{\*\cs2\cf2{}}{\*\cs4\cf4{{3}}} }\par\pard
+\cbpat1{{\*\cs2\cf2{						end}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{else if}} {\*\cs2\cf2{PotentioMeterValue}} {\*\cs11\cf11{>=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{6}{0}{0}}} {\*\cs2\cf2{large analog read value}\par\pard
+\cbpat1{							STEP_COUNT}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{						end}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{else if}} {\*\cs2\cf2{PotentioMeterValue}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}} {\*\cs2\cf2{small analog read value}\par\pard
+\cbpat1{							STEP_COUNT}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{5}{0}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{						end}\par\pard
+\cbpat1{				end}}}\par\pard
+\cbpat1{				{\*\cs13\cf13{if}} {\*\cs2\cf2{Event is MicroStepDrive}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{if}} {\*\cs2\cf2{PotentioMeterValue is}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{6}{0}{0}}} {\*\cs2\cf2{}}{\*\cs13\cf13{and}} {\*\cs2\cf2{}}{\*\cs11\cf11{>}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}} }\par\pard
+\cbpat1{{\*\cs2\cf2{							STEP_COUNT}} {\*\cs11\cf11{= (}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{7}{0}{0}}} {\*\cs2\cf2{}}{\*\cs11\cf11{/ (}}{\*\cs2\cf2{PotentioMeterValue}}{\*\cs11\cf11{+}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{))*}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}}} }\par\pard
+\cbpat1{{\*\cs2\cf2{						end}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{else if}} {\*\cs2\cf2{PotentioMeterValue}} {\*\cs11\cf11{>=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{6}{0}{0}}} {\*\cs2\cf2{large analog read value}\par\pard
+\cbpat1{							STEP_COUNT}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{						end}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{else if}} {\*\cs2\cf2{PotentioMeterValue}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}} {\*\cs2\cf2{small analog read value}\par\pard
+\cbpat1{							STEP_COUNT}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{						end}\par\pard
+\cbpat1{				end}}		}\par\pard
+\cbpat1{				{\*\cs13\cf13{if}} {\*\cs2\cf2{Event is HalfStepDrive}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{if}} {\*\cs2\cf2{PotentioMeterValue is}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{6}{0}{0}}} {\*\cs2\cf2{}}{\*\cs13\cf13{and}} {\*\cs2\cf2{}}{\*\cs11\cf11{>}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}} }\par\pard
+\cbpat1{{\*\cs2\cf2{							STEP_COUNT}} {\*\cs11\cf11{= (}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{7}{0}{0}}} {\*\cs2\cf2{}}{\*\cs11\cf11{/ (}}{\*\cs2\cf2{PotentioMeterValue}}{\*\cs11\cf11{+}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{))*}}{\*\cs2\cf2{}}{\*\cs4\cf4{{2}}} }\par\pard
+\cbpat1{{\*\cs2\cf2{						end}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{else if}} {\*\cs2\cf2{PotentioMeterValue}} {\*\cs11\cf11{>=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{6}{0}{0}}} {\*\cs2\cf2{large analog read value}\par\pard
+\cbpat1{							STEP_COUNT}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{						end}}}\par\pard
+\cbpat1{						{\*\cs13\cf13{else if}} {\*\cs2\cf2{PotentioMeterValue}} {\*\cs11\cf11{<}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{0}{0}}} {\*\cs2\cf2{small analog read value}\par\pard
+\cbpat1{							STEP_COUNT}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{0}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{						end					}\par\pard
+\cbpat1{				end	}\par\pard
+\cbpat1{				}\par\pard
+\cbpat1{		Set PostEvent as StepDrive}} {\*\cs13\cf13{and}} {\*\cs2\cf2{post it to StepService}\par\pard
+\cbpat1{		Initialize StepTimer}}{\*\cs11\cf11{,}} {\*\cs2\cf2{initialize time is equal to STEP_COUNT}\par\pard
+\cbpat1{END}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		}\par\pard
+\cbpat1{		}\par\pard
+\cbpat1{StepService Module}\par\pard
+\cbpat1{		}\par\pard
+\cbpat1{Define the valuables the Service needs}}{\*\cs11\cf11{:}}}\par\pard
+\cbpat1{{\*\cs2\cf2{define}} {\*\cs14\cf14{static}} {\*\cs2\cf2{varialbe CurrentState}}{\*\cs11\cf11{,}} {\*\cs2\cf2{StepServicePriority}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{define}} {\*\cs14\cf14{static}} {\*\cs2\cf2{module global array}}{\*\cs11\cf11{:}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static uint{8}_t}} {\*\cs2\cf2{Duty_B_cycle}}{\*\cs11\cf11{[}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{] = \{}}{\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{\};}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs5\cf5{//DUTY_A = array with phase A duty cycle}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static uint{8}_t}} {\*\cs2\cf2{Duty_A_cycle}}{\*\cs11\cf11{[}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{] = \{}}{\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{3}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{7}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{\};}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs5\cf5{//StepConfig = array with step configuration}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}{\*\cs14\cf14{static uint{8}_t}} {\*\cs2\cf2{StepNum}}{\*\cs11\cf11{[}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{] = \{}}{\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}A}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}A}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{8}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{5}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{}}{\*\cs4\cf4{{0}x{0}A}}{\*\cs2\cf2{}}{\*\cs11\cf11{\};}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{Define the different four kinds of driving motor}\par\pard
+\cbpat1{FullStepDrive is}} {\*\cs4\cf4{{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{WaveDriveDrive is}} {\*\cs4\cf4{{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{HalfStepDrive is}} {\*\cs4\cf4{{2}}} {\*\cs2\cf2{}}{\*\cs13\cf13{and}} {\*\cs2\cf2{MicroStepDrive is}} {\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*The indexes for FullStepDrive is {0},{4},{8},{1}{2}*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*The indexes for WaveDrive is {2},{6},{1}{0},{1}{4}*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*The indexes for HalfStepDrive is {0},{2},{4},{6},{8},{1}{0},{1}{2},{1}{4}*/}}{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs6\cf6{/*The indexes for MicroStepDrive is {0} - {1}{5}*/}}{\*\cs2\cf2{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{define a}} {\*\cs14\cf14{static int}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{StepIndex}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{Wave drive}}{\*\cs11\cf11{:}} {\*\cs2\cf2{define startposition is equal to}} {\*\cs4\cf4{{2}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{Full step drive}}{\*\cs11\cf11{:}} {\*\cs2\cf2{define startposition}} {\*\cs4\cf4{{0}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}}\par\pard
+\cbpat1{{\*\cs14\cf14{static int DIR}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{holds the direction whether CW}} {\*\cs13\cf13{or}} {\*\cs2\cf2{CCW}}}\par\pard
+\cbpat1{{\*\cs14\cf14{DIR}} {\*\cs2\cf2{}}{\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{declare}} {\*\cs14\cf14{static uint{1}{6}_t}} {\*\cs2\cf2{Para}}{\*\cs11\cf11{,}} {\*\cs2\cf2{as ThisEvent}}{\*\cs11\cf11{.}}{\*\cs2\cf2{EventParam}}{\*\cs11\cf11{,}} {\*\cs2\cf2{FullStepDrive}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{4}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}} {\*\cs2\cf2{etc}}{\*\cs11\cf11{.}} }\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{InitStepService}\par\pard
+\cbpat1{	Init PD{0}}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{3}}} {\*\cs2\cf2{as digital output pin}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{  Set StepMotor config to motor drive pin PD}} {\*\cs4\cf4{{0}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{3}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{	Set StepIndex is equal to startposition}}{\*\cs11\cf11{,}} {\*\cs2\cf2{which is zero}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{	Initialize PWM pin}}{\*\cs11\cf11{,}} {\*\cs2\cf2{PB{4}{5}}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{if}} {\*\cs2\cf2{no errors in initialization}} {\*\cs13\cf13{return true}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}	{\*\cs13\cf13{else return false}}}\par\pard
+\cbpat1{{\*\cs2\cf2{End}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{RunStepService}}}\par\pard
+\cbpat1{	{\*\cs13\cf13{if}} {\*\cs2\cf2{event checker detects button down}}{\*\cs11\cf11{,}} {\*\cs2\cf2{than change the}} {\*\cs14\cf14{DIR}}}\par\pard
+\cbpat1{{\*\cs2\cf2{		Change DIRECTION}\par\pard
+\cbpat1{	end}}}\par\pard
+\cbpat1{	}\par\pard
+\cbpat1{	{\*\cs13\cf13{if}} {\*\cs2\cf2{ThisEvent}} {\*\cs11\cf11{==}} {\*\cs2\cf2{StepDrive}\par\pard
+\cbpat1{		Set Para is equal to ThisEventParam}}}\par\pard
+\cbpat1{		{\*\cs5\cf5{//FullStepDrive={4} WaveDrive={4}  HalfStepDrive={2} MicroStepDrive={1}}}}\par\pard
+\cbpat1{{\*\cs2\cf2{		Let StepIndex}} {\*\cs11\cf11{=}} {\*\cs2\cf2{StepIndex}} {\*\cs11\cf11{+}} {\*\cs2\cf2{Para}}{\*\cs11\cf11{*}}{\*\cs2\cf2{}}{\*\cs14\cf14{DIR}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs13\cf13{if}} {\*\cs2\cf2{StepIndex is larger than}} {\*\cs4\cf4{{1}{5}}} {\*\cs2\cf2{then StepIndex}} {\*\cs11\cf11{-=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		{\*\cs13\cf13{if}} {\*\cs2\cf2{StepIndex is smaller than}} {\*\cs4\cf4{{0}}} {\*\cs2\cf2{then StepIndex}} {\*\cs11\cf11{+=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{1}{6}}}{\*\cs2\cf2{}}{\*\cs11\cf11{.}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}\par\pard
+\cbpat1{	Setting StepMotor config to motor drive pin}\par\pard
+\cbpat1{	Write PD{0}}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{1}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{2}}}{\*\cs2\cf2{}}{\*\cs11\cf11{,}}{\*\cs2\cf2{}}{\*\cs4\cf4{{3}}} {\*\cs2\cf2{pin as StepNum}}{\*\cs11\cf11{[}}{\*\cs2\cf2{StepIndex}}{\*\cs11\cf11{]}}}\par\pard
+\cbpat1{{\*\cs2\cf2{}}		}\par\pard
+\cbpat1{	{\*\cs13\cf13{if}} {\*\cs2\cf2{the driving method is Full}}{\*\cs11\cf11{,}} {\*\cs2\cf2{Half Step}} {\*\cs13\cf13{or}} {\*\cs2\cf2{Wave Drive}}{\*\cs11\cf11{,}} {\*\cs2\cf2{DutyCycle}} {\*\cs11\cf11{=}} {\*\cs2\cf2{}}{\*\cs4\cf4{{9}{9}}}{\*\cs2\cf2{}}{\*\cs11\cf11{.}}	{\*\cs2\cf2{}}{\*\cs13\cf13{else}} {\*\cs2\cf2{it}}{\*\cs3\cf3{'s equal to microstep'}}{\*\cs2\cf2{s dutycycle		}\par\pard
+\cbpat1{END}}}\par\pard
+\cbpat1{	}\par\pard
+\cbpat1{}}

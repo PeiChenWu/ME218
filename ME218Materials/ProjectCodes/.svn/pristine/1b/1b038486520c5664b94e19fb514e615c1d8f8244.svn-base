@@ -1,0 +1,140 @@
+#include "Init.h"
+#include "ADMulti.h"
+#include "MotorPWM.h"
+#include "SSI.h"
+#include "InputCapture.h"
+#include "IntSample.h"
+#include "EnablePA25_PB23_PD7_PF0.h"
+
+#define BitsPerNibble 4
+
+
+/*************************************************
+Private Functions
+*************************************************/
+static void InitAllPorts(void);
+static void InitBeaconPins(void);
+static void InitDIPSWitchPins(void);
+static void InitLocomotionPins(void);
+static void InitShootingPins(void);
+static void InitGameStatusLEDs(void);
+
+// Global variable
+uint8_t MyKartNum;
+
+void InitAll(void)
+{
+	// Enable System Clock for all ports
+	InitAllPorts();
+	
+	
+	InitBeaconPins();
+	
+	InitDIPSWitchPins();
+	
+	InitLocomotionPins();
+	InitMotorPWM();
+	InitInputCapture();
+	InitIntSample();
+	
+	InitShootingPins();
+	
+	InitGameStatusLEDs();
+	
+	InitSSI();
+	
+	// ADC Initialization for PE0 (Ultrasonic receiver)
+	// ADC_MultiInit(0);
+}
+
+void InitAllPorts(void)
+{		
+	// Enable all ports
+	HWREG(SYSCTL_RCGCGPIO) |= (SYSCTL_RCGCGPIO_R5|SYSCTL_RCGCGPIO_R4|SYSCTL_RCGCGPIO_R3|SYSCTL_RCGCGPIO_R2|SYSCTL_RCGCGPIO_R1|SYSCTL_RCGCGPIO_R0);
+	
+	// make sure that the Port module clocks have gotten going using peripheral ready macros
+	while ((HWREG(SYSCTL_PRGPIO) & (SYSCTL_PRGPIO_R5|SYSCTL_PRGPIO_R4|SYSCTL_PRGPIO_R3|SYSCTL_PRGPIO_R2|SYSCTL_PRGPIO_R1|SYSCTL_PRGPIO_R0))
+		!= (SYSCTL_PRGPIO_R5|SYSCTL_PRGPIO_R4|SYSCTL_PRGPIO_R3|SYSCTL_PRGPIO_R2|SYSCTL_PRGPIO_R1|SYSCTL_PRGPIO_R0));
+	
+	PortFunctionInit();
+}
+
+void InitBeaconPins(void)
+{	
+	HWREG(BEACON_PORT + GPIO_O_AFSEL) |= BEACON_PIN;		// Alternate Function
+	HWREG(BEACON_PORT + GPIO_O_PCTL) = (HWREG(BEACON_PORT+GPIO_O_PCTL) & 0xfff0ffff) + (7<<(4*BitsPerNibble));	// Select WT0CCP0
+	
+	HWREG(BEACON_PORT + GPIO_O_DEN) |= BEACON_PIN;			// Digital
+	HWREG(BEACON_PORT + GPIO_O_DIR) &= ~BEACON_PIN;			// Input
+}
+
+void InitDIPSWitchPins(void)
+{
+	HWREG(DIPSW_PORT + GPIO_O_DEN) |= DIPSW_PINS;				// Digital
+	HWREG(DIPSW_PORT + GPIO_O_DIR) &= DIPSW_PINS;				// Input
+	HWREG(DIPSW_PORT + GPIO_O_PUR) |= DIPSW_PINS;				// Internal Pullup
+	
+	// Read the value and store it to the MyKartNum varieble
+	MyKartNum = HWREG(DIPSW_DATA) & DIPSW_PINS;
+}
+
+void InitLocomotionPins(void)
+{
+	// Motors
+	HWREG(MOTOR_PORT + GPIO_O_DEN) |= (LEFT_MOTOR_DIR_PIN | 
+																		 LEFT_MOTOR_PWM_PIN |
+																		 LEFT_MOTOR_BRAKE_PIN | 
+																		 RIGHT_MOTOR_DIR_PIN | 
+																		 RIGHT_MOTOR_PWM_PIN |
+																		 RIGHT_MOTOR_BRAKE_PIN );		// Digital
+	
+	HWREG(MOTOR_PORT + GPIO_O_DIR) |= (LEFT_MOTOR_DIR_PIN | 
+																		 LEFT_MOTOR_PWM_PIN |
+																		 LEFT_MOTOR_BRAKE_PIN | 
+																		 RIGHT_MOTOR_DIR_PIN | 
+																		 RIGHT_MOTOR_PWM_PIN |
+																		 RIGHT_MOTOR_BRAKE_PIN );		// Output
+	
+	// Clear break pin
+	HWREG(MOTOR_DATA) &= ~(LEFT_MOTOR_BRAKE_PIN | RIGHT_MOTOR_BRAKE_PIN);
+	
+	HWREG(MOTOR_PORT + GPIO_O_AFSEL) |= (LEFT_MOTOR_PWM_PIN | RIGHT_MOTOR_PWM_PIN);			// PWM Alternate Function Select
+	HWREG(MOTOR_PORT + GPIO_O_PCTL) = (HWREG(MOTOR_PORT+GPIO_O_PCTL) & 0xffffff00) + 
+																		(4<<(0*BitsPerNibble)) + 			// Select M0PWM6
+																		(4<<(1*BitsPerNibble));				// Select M0PWM7
+	
+	// Motor Encoders
+	HWREG(MOTOR_ENCODER_PORT + GPIO_O_DEN) |= (LEFT_MOTOR_ENCODER_PIN | RIGHT_MOTOR_ENCODER_PIN);			// Digital
+	HWREG(MOTOR_ENCODER_PORT + GPIO_O_DIR) &= ~(LEFT_MOTOR_ENCODER_PIN | RIGHT_MOTOR_ENCODER_PIN);		// Input
+	
+	HWREG(MOTOR_ENCODER_PORT + GPIO_O_AFSEL) |= (LEFT_MOTOR_ENCODER_PIN | RIGHT_MOTOR_ENCODER_PIN);		// Alternate Function Select
+	HWREG(MOTOR_ENCODER_PORT + GPIO_O_PCTL) = (HWREG(MOTOR_ENCODER_PORT+GPIO_O_PCTL) & 0x00ffffff)+ 
+																						(7<<(6*BitsPerNibble)) + 	// Select WT1CCP0
+																						(7<<(7*BitsPerNibble));		// Select WT1CCP1
+}
+
+void InitShootingPins(void)
+{
+	// Pitching Motor
+	HWREG(PITCH_MOTOR_PORT + GPIO_O_DEN) |= PITCH_MOTOR_PIN;	// Digital
+	HWREG(PITCH_MOTOR_PORT + GPIO_O_DIR) |= PITCH_MOTOR_PIN;	// Output
+	
+	HWREG(PITCH_MOTOR_PORT + GPIO_O_AFSEL) |= PITCH_MOTOR_PIN;// Alternate Function Select
+	HWREG(PITCH_MOTOR_PORT + GPIO_O_PCTL) = (HWREG(PITCH_MOTOR_PORT+GPIO_O_PCTL) & 0xffff0ff)+ 
+																						(4<<(2*BitsPerNibble));		// Select M0PWM2
+	
+	// Latch Servos
+	HWREG(LATCH_PORT + GPIO_O_DEN) |= (LATCH_1_PIN | LATCH_2_PIN);	// Digital
+	HWREG(LATCH_PORT + GPIO_O_DIR) |= (LATCH_1_PIN | LATCH_2_PIN);	// Output
+	
+	HWREG(LATCH_PORT + GPIO_O_AFSEL) |= (LATCH_1_PIN | LATCH_2_PIN);// Alternate Function Select
+	HWREG(LATCH_PORT + GPIO_O_PCTL) = (HWREG(LATCH_PORT+GPIO_O_PCTL) & 0xff00ffff)+ 
+																						(4<<(4*BitsPerNibble)) + 	// Select M0PWM4
+																						(4<<(5*BitsPerNibble));		// Select M0PWM5
+}
+
+void InitGameStatusLEDs(void)
+{
+	HWREG(GAME_LED_PORT + GPIO_O_DEN) |= (GAME_LED_GREEN_PIN | GAME_LED_RED_PIN);	// Digital
+	HWREG(GAME_LED_PORT + GPIO_O_DIR) |= (GAME_LED_GREEN_PIN | GAME_LED_RED_PIN);	// Output
+}

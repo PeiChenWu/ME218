@@ -1,0 +1,11 @@
+#ifndef BeaconSensingService_H
+#define BeaconSensingService_H
+
+#include <stdint.h>
+#include <stdbool.h>
+
+// Interface for controlling the beacon sensing
+uint32_t ReadBeaconValue(void);
+void ResetPeakDetection(void);
+
+#endif

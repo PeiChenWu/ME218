@@ -1,0 +1,344 @@
+{\rtf1\ansi\uc0 \deff1{\fonttbl{\f1\fmodern\fprq1\fcharset0 Courier New;}}{\colortbl;\red255\green255\blue255;\red00\green00\blue00;\red255\green00\blue00;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue255;\red255\green34\blue255;\red255\green34\blue255;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue00;\red255\green34\blue255;}
+{\stylesheet{
+{\*\cs2\additive\cf2\f1\fs20\sbasedon222\snext0 HL Default;}
+{\*\cs3\additive\cf3\f1\fs20\sbasedon222\snext0 HL String;}
+{\*\cs4\additive\cf4\f1\fs20\sbasedon222\snext0 HL Number;}
+{\*\cs5\additive\cf5\f1\fs20\sbasedon222\snext0 HL SL Comment;}
+{\*\cs6\additive\cf6\f1\fs20\sbasedon222\snext0 HL ML Comment;}
+{\*\cs7\additive\cf7\f1\fs20\sbasedon222\snext0 HL Escape Character;}
+{\*\cs8\additive\cf8\f1\fs20\sbasedon222\snext0 HL Directive;}
+{\*\cs9\additive\cf9\f1\fs20\sbasedon222\snext0 HL Directive String;}
+{\*\cs10\additive\cf10\f1\fs20\sbasedon222\snext0 HL Line;}
+{\*\cs11\additive\cf11\f1\fs20\sbasedon222\snext0 HL Operator;}
+{\*\cs12\additive\cf12\f1\fs20\sbasedon222\snext0 HL Interpolation;}
+}}
+\paperw11905\paperh16837\margl1134\margr1134\margt1134\margb1134\sectd\plain\f1\fs20
+\pard \cbpat1{{\*\cs2\cf2{Morse Code Sample Pseudo Code Using the Gen{2}.x Event Framework}\par\pard
+\cbpat1{Rev {1}{3} {1}{0}/{2}{5}/{1}{4}}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Pseudo-code for the Button module (a service that implements a state machine)}\par\pard
+\cbpat1{Data private to the module: LastButtonState}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{InitializeButton}\par\pard
+\cbpat1{Takes a priority number, returns True. }\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Initialize the MyPriority variable with the passed in parameter.}\par\pard
+\cbpat1{Initialize the port line to monitor the button}\par\pard
+\cbpat1{Sample the button port pin and use it to initialize LastButtonState}\par\pard
+\cbpat1{Set CurrentState to be DEBOUNCING}\par\pard
+\cbpat1{Start debounce timer (timer posts to ButtonDebounceSM)}\par\pard
+\cbpat1{End of InitializeButton (return True)}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{CheckButtonEvents}\par\pard
+\cbpat1{Takes no parameters, returns True if an event posted ({1}{1}/{0}{4}/{1}{1} jec)}\par\pard
+\cbpat1{Local ReturnVal = False, CurrentButtonState}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Set CurrentButtonState to state read from port pin}\par\pard
+\cbpat1{If the CurrentButtonState is different from the LastButtonState}\par\pard
+\cbpat1{	Set ReturnVal = True}\par\pard
+\cbpat1{	If the CurrentButtonState is down}\par\pard
+\cbpat1{		PostEvent ButtonDown to ButtonDebounce queue}\par\pard
+\cbpat1{	Else}\par\pard
+\cbpat1{		PostEvent ButtonUp to ButtonDebounce queue}\par\pard
+\cbpat1{	Endif}\par\pard
+\cbpat1{Endif}\par\pard
+\cbpat1{Set LastButtonState to the CurrentButtonState}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Return ReturnVal}\par\pard
+\cbpat1{End of CheckButtonEvents}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{RunButtonDebounceSM (implements a {2}-state state machine for debouncing timing)}\par\pard
+\cbpat1{The EventType field of ThisEvent will be one of: ButtonUp, ButtonDown, or ES_TIMEOUT}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{If CurrentState is Debouncing}\par\pard
+\cbpat1{	If EventType is ES_TIMEOUT & parameter is debounce timer number}\par\pard
+\cbpat1{		Set CurrentState to READY{2}SAMPLE}\par\pard
+\cbpat1{Else if CurrentState is Ready{2}Sample}\par\pard
+\cbpat1{	If EventType is ButtonUp}\par\pard
+\cbpat1{		Start debounce timer}\par\pard
+\cbpat1{		Set CurrentState to DEBOUNCING}\par\pard
+\cbpat1{		Post DBButtonUp to MorseElements & DecodeMorse queues}\par\pard
+\cbpat1{	End if}\par\pard
+\cbpat1{	If EventType is ButtonDown}\par\pard
+\cbpat1{		Start debounce timer}\par\pard
+\cbpat1{		Set CurrentState to DEBOUNCING}\par\pard
+\cbpat1{		Post DBButtonDown to MorseElements & DecodeMorse queues}\par\pard
+\cbpat1{	End if}\par\pard
+\cbpat1{End Else}\par\pard
+\cbpat1{Return ES_NO_EVENT }\par\pard
+\cbpat1{End of RunButtonDebounceSM}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Pseudo-code for the Morse Elements module (a service that implements a state machine)}\par\pard
+\cbpat1{Data private to the module: MyPriority, CurrentState, TimeOfLastRise, TimeOfLastFall, LengthOfDot, FirstDelta}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{InitializeMorseElements}\par\pard
+\cbpat1{Takes a priority number, returns True. }\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Initialize the MyPriority variable with the passed in parameter.}\par\pard
+\cbpat1{Initialize the port line to receive Morse code}\par\pard
+\cbpat1{Set CurrentState to be InitMorseElements}\par\pard
+\cbpat1{Set FirstDelta to {0}}\par\pard
+\cbpat1{Post Event ES_Init to MorseElements queue (this service)}\par\pard
+\cbpat1{End of InitializeMorseElements}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{CheckMorseEvents (This function could also be placed in an "EventCheckers" module)}\par\pard
+\cbpat1{Takes no parameters, returns True if an event was posted ({1}{1}/{4}/{1}{1} jec)}\par\pard
+\cbpat1{Static local: LastInputState; local RetrunVal = False, CurrentInputState}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Get the CurrentInputState from the input line}\par\pard
+\cbpat1{If the state of the Morse input line has changed}\par\pard
+\cbpat1{		If the current state of the input line is high}\par\pard
+\cbpat1{			PostEvent RisingEdge with parameter of the Current Time}\par\pard
+\cbpat1{		Else (current input state is low)}\par\pard
+\cbpat1{			PostEvent FallingEdge with parameter of the Current Time}\par\pard
+\cbpat1{		Endif}\par\pard
+\cbpat1{		Set ReturnVal = True}\par\pard
+\cbpat1{Endif}\par\pard
+\cbpat1{Set LastInputState to CurrentInputState}\par\pard
+\cbpat1{Return ReturnVal}\par\pard
+\cbpat1{End of CheckMorseEvents}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{RunMorseElementsSM (implements the state machine for Morse Elements)}\par\pard
+\cbpat1{The EventType field of ThisEvent will be one of: ES_Init, RisingEdge, FallingEdge, CalibrationCompleted, EOCDetected, DBButtonDown.  The parameter field of the ThisEvent will be the time that the event occurred.}\par\pard
+\cbpat1{Returns ES_NO_EVENT }\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Local Variables: NextState}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Set NextState to CurrentState}\par\pard
+\cbpat1{Based on the state of the CurrentState variable choose one of the following blocks of code:}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		CurrentState is InitMorseElements}\par\pard
+\cbpat1{			If ThisEvent is ES_Init}\par\pard
+\cbpat1{				Set NextState to CalWaitForRise}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{		End InitMorseElements block}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		CurrentState is CalWaitForRise}\par\pard
+\cbpat1{			If ThisEvent is RisingEdge}\par\pard
+\cbpat1{				Set TimeOfLastRise to Time from event parameter}\par\pard
+\cbpat1{				Set NextState to CalWaitForFall}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{			If ThisEvent is CalibrationComplete}\par\pard
+\cbpat1{				Set NextState to EOC_WaitRise}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{		End CalWaitForRise block}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		CurrentState is CalWaitForFall}\par\pard
+\cbpat1{			If ThisEvent is FallingEdge}\par\pard
+\cbpat1{				Set TimeOfLastFall to Time from event parameter}\par\pard
+\cbpat1{				Set NextState to CalWaitForRise}\par\pard
+\cbpat1{				Call TestCalibration function}\par\pard
+\cbpat1{				EndIf}\par\pard
+\cbpat1{		End CalWaitForFall block}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		CurrentState is EOC_WaitRise}\par\pard
+\cbpat1{			If ThisEvent is RisingEdge}\par\pard
+\cbpat1{				Set TimeOfLastRise to Time from event parameter}\par\pard
+\cbpat1{				Set NextState to EOC_WaitFall}\par\pard
+\cbpat1{				Call CharacterizeSpace function}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{			If ThisEvent is DBButtonDown}\par\pard
+\cbpat1{				Set NextState to CalWaitForRise}\par\pard
+\cbpat1{				Set FirstDelta to {0}}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{		End EOC_WaitRise block}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		CurrentState is EOC_WaitFall}\par\pard
+\cbpat1{			If ThisEvent is FallingEdge}\par\pard
+\cbpat1{				Set TimeOfLastFall to Time from event parameter}\par\pard
+\cbpat1{				Set NextState to EOC_WaitRise}\par\pard
+\cbpat1{				EndIf}\par\pard
+\cbpat1{			If ThisEvent is DBButtonDown}\par\pard
+\cbpat1{				Set NextState to CalWaitForRise}\par\pard
+\cbpat1{				Set FirstDelta to {0}}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{			If ThisEvent is EOCDetected}\par\pard
+\cbpat1{				Set NextState to DecodeWaitFall}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{		End EOC_WaitFall block}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		CurrentState is DecodeWaitRise}\par\pard
+\cbpat1{			If ThisEvent is RisingEdge}\par\pard
+\cbpat1{				Set TimeOfLastRise to Time from event parameter}\par\pard
+\cbpat1{				Set NextState to DecodeWaitFall}\par\pard
+\cbpat1{				Call CharacterizeSpace function}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{			If ThisEvent is DBButtonDown}\par\pard
+\cbpat1{				Set NextState to CalWaitForRise}\par\pard
+\cbpat1{				Set FirstDelta to {0}}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{		End DecodeWaitRise block}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		CurrentState is DecodeWaitFall}\par\pard
+\cbpat1{			If ThisEvent is FallingEdge}\par\pard
+\cbpat1{				Set TimeOfLastFall to Time from event parameter}\par\pard
+\cbpat1{				Set NextState to DecodeWaitRise}\par\pard
+\cbpat1{				Call CharacterizePulse function}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{			If ThisEvent is DBButtonDown}\par\pard
+\cbpat1{				Set NextState to CalWaitForRise}\par\pard
+\cbpat1{				Set FirstDelta to {0}}\par\pard
+\cbpat1{			Endif }\par\pard
+\cbpat1{		End DecodeWaitFall block}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Set CurrentState to NextState}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Return ES_NO_EVENT}\par\pard
+\cbpat1{End of RunMorseElementsSM }\par\pard
+\cbpat1{}\par\pard
+\cbpat1{TestCalibration}\par\pard
+\cbpat1{Takes no parameters, returns nothing. }\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Local variable SecondDelta}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{If calibration is just starting (FirstDelta is {0})}\par\pard
+\cbpat1{		Set FirstDelta to most recent pulse width}\par\pard
+\cbpat1{Else}\par\pard
+\cbpat1{		Set SecondDelta to most recent pulse width}\par\pard
+\cbpat1{		If ({1}{0}{0} * FirstDelta / SecondDelta) less than or equal to {3}{3}}\par\pard
+\cbpat1{			Save FirstDelta as LengthOfDot}\par\pard
+\cbpat1{			PostEvent CalCompleted to MorseElementsSM}\par\pard
+\cbpat1{		ElseIf ({1}{0}{0} * FirstDelta / Second Delta) greater than or equal to {3}{0}{0}}\par\pard
+\cbpat1{			Save SecondDelta as LengthOfDot}\par\pard
+\cbpat1{			PostEvent CalCompleted to MorseElementsSM}\par\pard
+\cbpat1{		Else (prepare for next pulse)}\par\pard
+\cbpat1{			SetFirstDelta to SecondDelta}\par\pard
+\cbpat1{		EndIf}\par\pard
+\cbpat1{EndIf}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Return }\par\pard
+\cbpat1{End of TestCalibration}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{CharacterizeSpace}\par\pard
+\cbpat1{Takes no parameters, returns nothing.}\par\pard
+\cbpat1{Posts one of EOCDetected Event, EOWDetected Event, BadSpace Event as appropriate}\par\pard
+\cbpat1{on good dot-space, does nothing}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Local variable LastInterval}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Calculate LastInterval as TimeOfLastRise – TimeOfLastFall}\par\pard
+\cbpat1{If LastInterval not OK for a Dot Space}\par\pard
+\cbpat1{	If LastInterval OK for a Character Space}\par\pard
+\cbpat1{		PostEvent EOCDetected Event to Decode Morse Service & Morse Elements Service}\par\pard
+\cbpat1{	Else}\par\pard
+\cbpat1{		If LastInterval OK for Word Space}\par\pard
+\cbpat1{			PostEvent EOWDetected Event to Decode Morse Service}\par\pard
+\cbpat1{		Else}\par\pard
+\cbpat1{			PostEvent BadSpace Event to Decode Morse Service}\par\pard
+\cbpat1{		EndIf}\par\pard
+\cbpat1{	Endif}\par\pard
+\cbpat1{EndIf}\par\pard
+\cbpat1{Return}\par\pard
+\cbpat1{End of CharacterizeSpace}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{CharacterizePulse}\par\pard
+\cbpat1{Takes no parameters, returns nothing.}\par\pard
+\cbpat1{Posts one of DotDetectedEvent, DashDetectedEvent, BadPulseEvent,}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Local variable LastPulseWidth}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Calculate LastPulseWidth as TimeOfLastFall - TimeOfLastRise}\par\pard
+\cbpat1{If LastPulseWidth OK for a dot}\par\pard
+\cbpat1{		PostEvent DotDetected Event to Decode Morse Service}\par\pard
+\cbpat1{Else}\par\pard
+\cbpat1{		If LastPulseWidth OK for dash}\par\pard
+\cbpat1{			PostEvent DashDetected Event to Decode Morse Service}\par\pard
+\cbpat1{		Else}\par\pard
+\cbpat1{			PostEvent BadPulse Event to Decode Morse Service}\par\pard
+\cbpat1{		EndIf}\par\pard
+\cbpat1{EndIf}\par\pard
+\cbpat1{Return }\par\pard
+\cbpat1{End of CharacterizePulse}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Pseudo-code for the Decode Morse module (a simple service)}\par\pard
+\cbpat1{Data private to the module: MorseString, the arrays LegalChars and MorseCode}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{InitMorseDecode}\par\pard
+\cbpat1{Takes a priority number, returns True. }\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Initialize the MyPriority variable with the passed in parameter.}\par\pard
+\cbpat1{Call ClearMorseChar}\par\pard
+\cbpat1{Call LCDInit()}\par\pard
+\cbpat1{End of InitMorseDecode}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{RunMorseDecode (implements the service for Morse Decode)}\par\pard
+\cbpat1{The EventType field of ThisEvent will be one of: DotDetectedEvent, DashDetectedEvent, EOCDetected, EOWDetected, ButtonDown.}\par\pard
+\cbpat1{Returns ES_NO_EVENT if No Error detected, ES_ERROR otherwise}\par\pard
+\cbpat1{local var ReturnValue initialized to ES_NO_EVENT}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Based on the state of the ThisEvent variable choose one of the following blocks of code:}\par\pard
+\cbpat1{	If ThisEvent is DotDetected Event}\par\pard
+\cbpat1{		If there is room for another Morse element in the internal representation}\par\pard
+\cbpat1{			Add a Dot to the internal representation}\par\pard
+\cbpat1{		Else}\par\pard
+\cbpat1{			Set ReturnValue to ES_ERROR with param set to indicate this location}\par\pard
+\cbpat1{	End if ThisEvent is DotDetected Event}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{	If ThisEvent is DashDetected Event}\par\pard
+\cbpat1{		If there is room for another Morse element in the internal representation}\par\pard
+\cbpat1{			Add a Dash to the internal representation}\par\pard
+\cbpat1{		Else}\par\pard
+\cbpat1{			Set ReturnValue to ES_ERROR ERROR with param set to indicate this location}\par\pard
+\cbpat1{	End if ThisEvent is DashDetected Event}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{	If ThisEvent is EOCDetected Event}\par\pard
+\cbpat1{		If call to DecodeMorse does not return an error}\par\pard
+\cbpat1{			Print to LCD the decoded character}\par\pard
+\cbpat1{			Call ClearMorseChar}\par\pard
+\cbpat1{		Else}\par\pard
+\cbpat1{			Set ReturnValue to ES_ERROR ERROR with param set to indicate this location}\par\pard
+\cbpat1{	End if is EOCDetected Event}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{	If ThisEvent is EOWDetected Event}\par\pard
+\cbpat1{		If call to DecodeMorse does not return an error}\par\pard
+\cbpat1{			Print to LCD the decoded character}\par\pard
+\cbpat1{			Print to the LCD a space}\par\pard
+\cbpat1{			Call ClearMorseChar}\par\pard
+\cbpat1{		Else}\par\pard
+\cbpat1{			Set ReturnValue to ES_ERROR ERROR with param set to indicate this location}\par\pard
+\cbpat1{	End if ThisEvent is EOWDetected Event}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{	If ThisEvent is DBButtonDown Event  (Added {1}{1}/{3}/{1}{1} JEC)}\par\pard
+\cbpat1{		Call ClearMorseChar}\par\pard
+\cbpat1{	End if ThisEvent is ButtonDown Event}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{return ReturnValue}\par\pard
+\cbpat1{End MorseDecode}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{ClearMorseChar}\par\pard
+\cbpat1{Takes no parameters, returns nothing}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Clear (empty) the MorseString variable}\par\pard
+\cbpat1{End of ClearMorseChar}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{DecodeMorseString}\par\pard
+\cbpat1{Takes no parameters, returns either a character or a symbolic value indicating failure}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{		For every entry in the array MorseCode}\par\pard
+\cbpat1{			If MorseString is the same as current position in MorseCode }\par\pard
+\cbpat1{				return contents of current position in LegalChars}\par\pard
+\cbpat1{			EndIf}\par\pard
+\cbpat1{		EndFor}\par\pard
+\cbpat1{return ERROR, since we didn't find a matching string in MorseCode}\par\pard
+\cbpat1{End of DecodeMorseString}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Pseudo-code for the Main module}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Main Function}\par\pard
+\cbpat1{Takes no parameters, returns nothing}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{Initialize the event framework (ES_Initialize) }\par\pard
+\cbpat1{This call to ES_Initialize will call the initialization functions for the Button, MorseElements and DecodeMorse modules}\par\pard
+\cbpat1{Call ES_Run to check for and process events}\par\pard
+\cbpat1{This call to ES_Run will only return in case of an error that can not be handled.}\par\pard
+\cbpat1{Process whatever error occurred if we get to this point.}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{End of Main Function}}}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}\par\pard
+\cbpat1{}}

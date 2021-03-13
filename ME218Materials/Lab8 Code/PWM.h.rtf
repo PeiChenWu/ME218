@@ -1,0 +1,17 @@
+{\rtf1\ansi\uc0 \deff1{\fonttbl{\f1\fmodern\fprq1\fcharset0 Times New Roman;}}{\colortbl;\red255\green255\blue255;\red00\green00\blue00;\red255\green00\blue00;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue255;\red255\green34\blue255;\red255\green34\blue255;\red255\green00\blue00;\red00\green00\blue255;\red00\green00\blue00;\red255\green34\blue255;\red178\green104\blue24;\red00\green255\blue00;\red178\green104\blue24;\red00\green00\blue00;}
+\paperw11905\paperh16837\margl1134\margr1134\margt1134\margb1134\sectd\plain\f1\fs20
+\pard \cbpat1{{\cf2{}}{\cf8{#ifndef PWM_H}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#define PWM_H}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf8{#define LeftMotor {6}}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#define RightMotor {7}}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf8{#include <stdint.h>}}}\par\pard
+\cbpat1{{\cf2{}}{\cf8{#include <stdbool.h>}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf14{void}} {\cf2{}}{\cf16{InitPWM}}{\cf2{}}{\cf11{(}}{\cf2{}}{\cf14{void}}{\cf2{}}{\cf11{);}}}\par\pard
+\cbpat1{{\cf2{}}{\cf14{void}} {\cf2{}}{\cf16{setPWMDuty}}{\cf2{}}{\cf11{(}}{\cf2{}}{\cf14{uint{8}_t}} {\cf2{pwmDuty}}{\cf11{,}} {\cf2{}}{\cf14{uint{8}_t}} {\cf2{pwmChannel}}{\cf11{);}}		{\cf2{}}{\cf5{// unit: % ({0} - {1}{0}{0}), LeftMotor or RightMotor}}}\par\pard
+\cbpat1{{\cf2{}}{\cf14{void}} {\cf2{}}{\cf16{setPWMPolarity}}{\cf2{}}{\cf11{(}}{\cf2{}}{\cf14{bool}} {\cf2{invertEn}}{\cf11{,}} {\cf2{}}{\cf14{uint{8}_t}} {\cf2{pwmChannel}}{\cf11{);}}{\cf2{}}{\cf5{// invert PWM}}}\par\pard
+\cbpat1{{\cf2{}}}\par\pard
+\cbpat1{{\cf8{#endif}}{\cf2{}}}\par\pard
+\cbpat1{}}
