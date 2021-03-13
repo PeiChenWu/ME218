@@ -1,4 +1,4 @@
 # Stanford ME218 Mechatronics
-This course is a smart product design course series.  Focusing on building mechatronics prototypes/devices from scratch. Learned circuit designs, signal conditioning, programmed in C for microcontroller, etc.
+This folder contains the course projects of a smart product design course series. The course is focusing on building mechatronics prototypes/devices from scratch, by learning circuit design, signal conditioning for sensors, programmed in C for microcontroller, etc.
 
 Programming proficiency: C 
